@@ -13,7 +13,6 @@ class HttpService {
     this.baseURL = '/api';
     this.authToken = getUserAuthToken();
     this.createAxiosInstance();
-    console.log('authToken: ', this.authToken);
     this.axios.interceptors.response.use(
       (response) => response,
       (error) => {

@@ -6,13 +6,19 @@ const apiPath = {
   student: {},
   teacher: {},
   admin: {
-    addClass: '/admin/addClass',
-    bulkAddClass: '/admin/bulkAddClass',
+    addClass: '/admin/add-class',
+    bulkAddClass: '/admin/bulk-add-class',
+    allClass: '/admin/all-class',
+    editClass: '/admin/edit-class',
+    deleteClass: 'admin/delete-class',
   },
   api: {
     admin: {
-      addClass: '/addClass',
-      bulkAddClass: '/bulkAddClass',
+      addClass: '/add-class',
+      bulkAddClass: '/bulk-add-class',
+      allClass: '/all-class',
+      editClass: '/edit-class/:id',
+      deleteClass: '/delete-class/:id',
     },
   },
 };

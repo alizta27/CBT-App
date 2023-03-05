@@ -1,5 +1,13 @@
 import React from 'react';
-import { Button, Card, Col, Row, Typography, Divider } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Typography,
+  Divider,
+  notification,
+} from 'antd';
 
 import { DragDrop } from '@/components';
 import AddClassForm from '@/components/AddClassForm';
@@ -13,8 +21,9 @@ const { Text, Title } = Typography;
 
 export default function AddClass() {
   const dispatch = useDispatch();
+  const [api, contextHolder] = notification.useNotification();
 
-  const onDragDrop = (data) => {
+  const onDragDrop = async (data) => {
     if (data) {
       const payload = data.map((el) => {
         return {
@@ -23,11 +32,25 @@ export default function AddClass() {
           name: el['Nama Kelas'],
         };
       });
-      dispatch(bulkAddClass(payload));
+      const { data: dataApi } = await dispatch(bulkAddClass(payload));
+      if (dataApi) {
+        api.success({
+          message: `Success`,
+          description: dataApi.message,
+          placement: 'topRight',
+        });
+      } else {
+        api.error({
+          message: `Error`,
+          description: 'Gagal menambahkan data. Coba lagi',
+          placement: 'topRight',
+        });
+      }
     }
   };
   return (
     <>
+      {contextHolder}
       <Title level={2}>Tambah Data Kelas</Title>
       <Text>
         Tambah Data Kelas dengan mengisi form di bawah ini atau dengan

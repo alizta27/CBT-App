@@ -8,6 +8,8 @@ const actionTypes = {
   SET_PAGE_TITLE: 'SET_PAGE_TITLE',
   ADD_CLASS: 'ADD_CLASS',
   BULK_ADD_CLASS: 'BULK_ADD_CLASS',
+  ALL_CLASS: 'ALL_CLASS',
+  EDIT_CLASS: 'EDIT_CLASS',
 };
 
 export default actionTypes;

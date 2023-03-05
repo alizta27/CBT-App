@@ -48,11 +48,15 @@ const deleteRequest = async (path) => {
 
 export default {
   auth: {
-    login: (payload) => postRequest(apiPath.login, payload),
+    login: (payload) => postRequest(base + apiPath.login, payload),
     getAuth: (payload) => postRequest(apiPath.getAuth, payload),
   },
   admin: {
     addClass: (payload) => http.post(apiPath.admin.addClass, payload),
     bulkAddClass: (payload) => http.post(apiPath.admin.bulkAddClass, payload),
+    getAllClass: () => http.get(apiPath.admin.allClass),
+    editClass: (id, payload) =>
+      http.post(apiPath.admin.editClass + '/' + id, payload),
+    deleteClass: (id) => http.delete(apiPath.admin.deleteClass + '/' + id),
   },
 };

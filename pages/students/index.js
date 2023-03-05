@@ -1,7 +1,6 @@
 import { DefaultLayout } from '@/components';
 
 const Students = (props) => {
-  console.log('props: ', props);
   return (
     <DefaultLayout title={'layout'}>
       <p>HEad</p>

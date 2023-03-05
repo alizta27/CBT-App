@@ -9,10 +9,9 @@ const adminRouter = require('./adminRouter');
 // const profil = require('./profil');
 const authentification = require('../middlewares/auth');
 
-router.get('/control', Controller.home);
 router.post(apiPath.login, Controller.login);
 router.post(apiPath.getAuth, Controller.getDataByAuth);
-router.post('/admin/addClass');
+
 // router.post("/register", Controller.register);
 router.use(authentification);
 

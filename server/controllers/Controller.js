@@ -75,9 +75,7 @@ class Controller {
 
       const { username, password, role } = req.body;
 
-      console.log('here: ', role);
       if (role === 'admin') {
-        console.log('here');
         user = await Admin.create({
           username,
           password,

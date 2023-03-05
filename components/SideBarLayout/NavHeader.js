@@ -5,6 +5,7 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 
 import style from './styles.module.scss';
+import { useRouter } from 'next/router';
 
 export default function NavHeader({ barTitle }) {
   const { Header } = Layout;
@@ -12,6 +13,8 @@ export default function NavHeader({ barTitle }) {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const router = useRouter();
 
   const clickRef = useRef();
 
@@ -29,6 +32,7 @@ export default function NavHeader({ barTitle }) {
           type="text"
           onClick={() => {
             localStorage.clear();
+            router.push('/');
           }}
         >
           <LogoutOutlined />

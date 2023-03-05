@@ -1,13 +1,81 @@
-import { Table, Button } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { Modal, Button, notification } from 'antd';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
 
-import { CustomTable, SidebarContext } from '@/components';
-import AddClassForm from '@/components/AddClassForm';
+import { CustomTable } from '@/components';
+
+import {
+  editClass,
+  getAllClass,
+  deleteClass as deleteClassAction,
+} from '@/store/actions';
 
 import styles from './styles.module.scss';
+import AddClassForm from '@/components/AddClassForm';
 
 export default function ClassList() {
+  const dispatch = useDispatch();
+  const [api, contextHolder] = notification.useNotification();
+
+  const [classData, setClassData] = useState([]);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [editData, setEditData] = useState({});
+
+  const toggleEditModal = useCallback(() => {
+    setIsOpenEditModal((prevState) => !prevState);
+  }, []);
+
+  const deleteClass = async (id) => {
+    const { data } = await dispatch(deleteClassAction(id));
+    if (data) {
+      fetchData();
+      api.success({
+        message: `Success`,
+        description: data.message,
+        placement: 'topRight',
+      });
+    } else {
+      api.error({
+        message: `Error`,
+        description: 'Gagal mengupdate data. Coba lagi',
+        placement: 'topRight',
+      });
+    }
+  };
+
+  const deleteClassModal = (id) => {
+    Modal.warning({
+      title: 'Apakah anda yakin?',
+      content: 'Data yang anda hapus tidak dapat di kembalikan lagi',
+      onOk: () => deleteClass(id),
+      onCancel: () => {},
+      okCancel: true,
+    });
+  };
+
+  const onEditClass = async (value) => {
+    const { data } = await dispatch(editClass(editData.id, value));
+    if (data) {
+      fetchData();
+      api.success({
+        message: `Success`,
+        description: data.message,
+        placement: 'topRight',
+      });
+      toggleEditModal();
+    } else {
+      api.error({
+        message: `Error`,
+        description: 'Gagal mengupdate data. Coba lagi',
+        placement: 'topRight',
+      });
+      toggleEditModal();
+    }
+    console.log('value: ', data.message);
+  };
+
   const columns = [
     {
       title: 'Tingkat',
@@ -27,34 +95,71 @@ export default function ClassList() {
       filterDropdown: <p>a</p>,
     },
   ];
-  const data = [];
-  for (let i = 0; i < 46; i++) {
-    data.push({
-      key: i,
-      class: 5,
-      className: `5 A`,
-      totalStudents: `${i}`,
-      action: (
-        <div className={styles.buttonContainer}>
-          <Button>
-            <EditOutlined />
-            Edit
-          </Button>
-          <Button danger>
-            <DeleteOutlined />
-            Hapus
-          </Button>
-        </div>
-      ),
-    });
-  }
+
+  const fetchData = async () => {
+    const { data } = await dispatch(getAllClass());
+
+    if (data) {
+      const newData = data.class?.map((el, i) => {
+        return {
+          key: i,
+          class: el.grade,
+          className: el.name,
+          totalStudents: el.total_student,
+          action: (
+            <div className={styles.buttonContainer}>
+              <Button
+                onClick={() => {
+                  setEditData({
+                    id: el.id,
+                    name: el.name,
+                    grade: el.grade,
+                    total_student: el.total_student,
+                  });
+                  toggleEditModal();
+                }}
+              >
+                <EditOutlined />
+                Edit
+              </Button>
+              <Button
+                danger
+                onClick={() => {
+                  deleteClassModal(el.id);
+                }}
+              >
+                <DeleteOutlined />
+                Hapus
+              </Button>
+            </div>
+          ),
+        };
+      });
+      setClassData(newData);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
-    // <SideBarLayout>
-    // <div className={styles.container}>
-    <CustomTable columns={columns} data={data} />
-    // {/* </div> */}
-    // {/* <AddClassForm /> */}
-    // {/* </SideBarLayout> */}
+    <>
+      {contextHolder}
+      <CustomTable columns={columns} data={classData} />;
+      <Modal
+        open={isOpenEditModal}
+        title="Title"
+        onOk={toggleEditModal}
+        onCancel={toggleEditModal}
+        footer={[
+          <Button key="back" onClick={toggleEditModal}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <AddClassForm onEditForm={onEditClass} editData={editData} />
+      </Modal>
+    </>
   );
 }

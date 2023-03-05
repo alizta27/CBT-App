@@ -68,7 +68,6 @@ export function NavMenu({ setBarTitle }) {
         })),
       }))}
       onClick={({ key }) => {
-        console.log('KEYT: ', key);
         handleBarTitle(key);
         setSelectedMenu(key);
         router.push(key);

@@ -12,7 +12,7 @@ class ClassController {
         total_student,
       });
 
-      res.status(200).json({ message: 'berhasil menambahkan kelas' });
+      res.status(200).json({ message: 'Berhasil menambahkan kelas' });
     } catch (error) {
       next(error);
     }
@@ -29,7 +29,7 @@ class ClassController {
 
       await Class.bulkCreate(body);
 
-      res.status(200).json({ message: 'berhasil menambahkan kelas' });
+      res.status(200).json({ message: 'Berhasil menambahkan kelas' });
     } catch (error) {
       next(error);
     }
@@ -38,6 +38,7 @@ class ClassController {
   static async editClass(req, res, next) {
     try {
       const id = req.params.id;
+
       const { grade, name, total_student } = req.body;
 
       await Class.update(
@@ -50,7 +51,7 @@ class ClassController {
           where: { id },
         }
       );
-      res.status(200).json({ message: 'berhasil mengedit kelas' });
+      res.status(200).json({ message: 'Berhasil mengedit kelas' });
     } catch (error) {
       next(error);
     }
