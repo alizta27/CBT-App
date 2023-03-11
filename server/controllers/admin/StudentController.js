@@ -1,15 +1,18 @@
-const { Student } = require('../../models');
+const { Student, Class } = require('../../models');
 
 const { v4: uuid } = require('uuid');
+const { hashingPassword } = require('../../helpers/helpers');
 
 class StudentController {
-  static async AddStudentData(req, res, next) {
+  static async addStudentData(req, res, next) {
     try {
-      const { username, password, class_id } = req.body;
+      const { full_name, username, password, class_id } = req.body;
       await Student.create({
+        id: uuid(),
         username,
         password,
         class_id,
+        full_name,
       });
 
       res.status(200).json({ message: 'berhasil menambahkan kelas' });
@@ -23,6 +26,7 @@ class StudentController {
       const body = req?.body?.map((el) => {
         return {
           ...el,
+          password: hashingPassword(el.password),
           id: uuid(),
         };
       });
@@ -38,19 +42,17 @@ class StudentController {
   static async editStudent(req, res, next) {
     try {
       const id = req.params.id;
-      const { username, password, class_id } = req.body;
+      const { body } = req;
 
       await Student.update(
         {
-          username,
-          password,
-          class_id,
+          ...body,
         },
         {
           where: { id },
         }
       );
-      res.status(200).json({ message: 'berhasil mengedit kelas' });
+      res.status(200).json({ message: 'berhasil mengedit siswa' });
     } catch (error) {
       next(error);
     }
@@ -70,7 +72,18 @@ class StudentController {
 
   static async getListStudent(req, res, next) {
     try {
-      const students = await Student.findAll();
+      const students = await Student.findAll({
+        include: [
+          {
+            model: Class,
+            attributes: ['grade', 'name'],
+          },
+        ],
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      });
+      // const decryptPass  = students.password,
       res.status(200).json({ students });
     } catch (error) {
       next(error);

@@ -1,9 +1,10 @@
 const { Teacher } = require('../../models');
 
 const { v4: uuid } = require('uuid');
+const { hashingPassword } = require('../../helpers/helpers');
 
 class StudentController {
-  static async AddTeacherData(req, res, next) {
+  static async addTeacherData(req, res, next) {
     try {
       const { full_name, password, task, username } = req.body;
       await Teacher.create({
@@ -11,9 +12,10 @@ class StudentController {
         password,
         task,
         username,
+        id: uuid(),
       });
 
-      res.status(200).json({ message: 'berhasil menambahkan kelas' });
+      res.status(200).json({ message: 'berhasil menambahkan guru' });
     } catch (error) {
       next(error);
     }
@@ -25,12 +27,13 @@ class StudentController {
         return {
           ...el,
           id: uuid(),
+          password: hashingPassword(el.password),
         };
       });
 
       await Teacher.bulkCreate(body);
 
-      res.status(200).json({ message: 'berhasil menambahkan kelas' });
+      res.status(200).json({ message: 'berhasil menambahkan guru' });
     } catch (error) {
       next(error);
     }
@@ -39,20 +42,17 @@ class StudentController {
   static async editTeacher(req, res, next) {
     try {
       const id = req.params.id;
-      const { full_name, password, task, username } = req.body;
+      const { body } = req;
 
       await Teacher.update(
         {
-          full_name,
-          password,
-          task,
-          username,
+          ...body,
         },
         {
           where: { id },
         }
       );
-      res.status(200).json({ message: 'berhasil mengedit kelas' });
+      res.status(200).json({ message: 'berhasil mengedit guru' });
     } catch (error) {
       next(error);
     }

@@ -9,14 +9,36 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Question.belongsTo(models.Teacher);
-      Question.belongsTo(models.Exam);
+      Question.belongsTo(models.Teacher, { foreignKey: 'teacher_id' });
+      Question.belongsTo(models.Exam, { foreignKey: 'question_id' });
     }
   }
   Question.init(
     {
-      exam_link: DataTypes.STRING,
-      answer: DataTypes.STRING,
+      question_link: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Link is required',
+          },
+          notEmpty: {
+            msg: 'Link is required',
+          },
+        },
+      },
+      answer: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Answer is required',
+          },
+          notEmpty: {
+            msg: 'Answer is required',
+          },
+        },
+      },
       teacher_id: DataTypes.STRING,
     },
     {

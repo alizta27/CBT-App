@@ -43,7 +43,7 @@ class Controller {
           },
         });
       }
-
+      console.log('USER: ', user);
       if (!user) {
         throw new Error('Invalid email or password');
       }
@@ -114,9 +114,11 @@ class Controller {
 
   static async getDataByAuth(req, res, next) {
     try {
-      const { token } = req.body;
+      console.log('hereee?');
+      const auth_token = req.headers['auth-token'];
+      console.log('auth_token: ', auth_token);
 
-      const { role } = verifyToken(token);
+      const { role } = verifyToken(auth_token);
       if (!role) {
         throw new Error('Invalid Token');
       }

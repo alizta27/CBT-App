@@ -10,23 +10,27 @@ import {
 } from 'antd';
 
 import { DragDrop } from '@/components';
-import AddClassForm from '@/components/form';
+import AddExamForm from '@/components/form/AddExamForm';
 
 import { useDispatch } from 'react-redux';
-import { bulkAddStudent } from '@/store/actions';
-
-import styles from './styles.module.scss';
-import AddStudentForm from '@/components/form/AddStudentForm';
+import { bulkAddClass } from '@/store/actions';
 
 const { Text, Title } = Typography;
 
-export default function AddStudent() {
+export default function AddExam() {
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
 
   const onDragDrop = async (data) => {
     if (data) {
-      const { data: dataApi } = await dispatch(bulkAddStudent(data));
+      const payload = data.map((el) => {
+        return {
+          grade: el.Tingkat,
+          total_student: el['Jumlah Siswa'],
+          name: el['Nama Kelas'],
+        };
+      });
+      const { data: dataApi } = await dispatch(bulkAddClass(payload));
       if (dataApi) {
         api.success({
           message: `Success`,
@@ -45,9 +49,9 @@ export default function AddStudent() {
   return (
     <>
       {contextHolder}
-      <Title level={2}>Tambah Data Siswa</Title>
+      <Title level={2}>Tambah Data Ujian</Title>
       <Text>
-        Tambah Data Siswa dengan mengisi form di bawah ini atau dengan
+        Tambah Data Ujian dengan mengisi form di bawah ini atau dengan
         mendowload template yang sudah disediakan dan menguploadnya melalu form
         upload file.
       </Text>
@@ -55,7 +59,7 @@ export default function AddStudent() {
       <Row gutter={24}>
         <Col span={12}>
           <Card title="Tambah Kelas" bordered={false}>
-            <AddStudentForm />
+            <AddExamForm />
           </Card>
         </Col>
         <Col span={12}>

@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Exam.hasMany(models.Question);
-      Exam.belongsTo(models.Class);
-      Exam.belongsTo(models.Result);
+      Exam.hasMany(models.Question, { foreignKey: 'question_id' });
+      Exam.belongsTo(models.Class, { foreignKey: 'class_id' });
+      Exam.belongsTo(models.Result, { foreignKey: 'exam_id' });
     }
   }
   Exam.init(

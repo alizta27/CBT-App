@@ -18,7 +18,7 @@ const authentification = async (req, res, next) => {
 
     req.userAccessLogin = {
       id: userLoginData.id,
-      schoolId: userLoginData.schoolId,
+      role: checkToken.role,
     };
 
     next();
@@ -27,4 +27,44 @@ const authentification = async (req, res, next) => {
   }
 };
 
-module.exports = authentification;
+const authAdmin = async (req, res, next) => {
+  try {
+    const { role } = req.userAccessLogin;
+
+    if (role !== 'admin') {
+      throw new Error('Not Authorized');
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+const authStudent = async (req, res, next) => {
+  try {
+    const { role } = req.userAccessLogin;
+
+    if (role !== 'student') {
+      throw new Error('Not Authorized');
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+const authTeacher = async (req, res, next) => {
+  try {
+    const { role } = req.userAccessLogin;
+
+    if (role !== 'teacher') {
+      throw new Error('Not Authorized');
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { authentification, authAdmin, authStudent, authTeacher };

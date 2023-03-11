@@ -1,6 +1,6 @@
 import appPath from '@/constant/appPath';
 
-const admin = [
+export const admin = [
   {
     key: 'dashboard',
     title: 'Dashboard',
@@ -61,4 +61,31 @@ const admin = [
   },
 ];
 
-export default admin;
+export const teacher = [
+  {
+    key: 'dashboard',
+    title: 'Dashboard',
+    path: appPath.teacher.dashboard,
+  },
+  {
+    key: 'exam',
+    title: 'Data Soal Ujian',
+    children: [
+      {
+        key: 'examList',
+        title: 'Daftar Soal Ujian',
+        path: appPath.teacher.examList,
+      },
+      {
+        key: 'addExam',
+        title: 'Tambah Soal Ujian',
+        path: appPath.teacher.addExam,
+      },
+    ],
+  },
+  {
+    key: 'reasult',
+    title: 'Data Hasil Ujian',
+    path: appPath.teacher.examResult,
+  },
+];

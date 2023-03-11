@@ -10,7 +10,7 @@ import {
 } from 'antd';
 
 import { DragDrop } from '@/components';
-import AddClassForm from '@/components/AddClassForm';
+import AddClassForm from '@/components/form';
 
 import { useDispatch } from 'react-redux';
 import { bulkAddClass } from '@/store/actions';

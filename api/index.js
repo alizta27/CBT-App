@@ -49,14 +49,33 @@ const deleteRequest = async (path) => {
 export default {
   auth: {
     login: (payload) => postRequest(base + apiPath.login, payload),
-    getAuth: (payload) => postRequest(apiPath.getAuth, payload),
+    getAuth: () => http.post(apiPath.getAuth),
   },
   admin: {
+    // * ========= Class ============
     addClass: (payload) => http.post(apiPath.admin.addClass, payload),
     bulkAddClass: (payload) => http.post(apiPath.admin.bulkAddClass, payload),
     getAllClass: () => http.get(apiPath.admin.allClass),
     editClass: (id, payload) =>
       http.post(apiPath.admin.editClass + '/' + id, payload),
     deleteClass: (id) => http.delete(apiPath.admin.deleteClass + '/' + id),
+
+    // * ========= student ============
+    addStudent: (payload) => http.post(apiPath.admin.addStudent, payload),
+    bulkAddStudent: (payload) =>
+      http.post(apiPath.admin.bulkAddStudent, payload),
+    getAllStudent: () => http.get(apiPath.admin.allStudent),
+    editStudent: (id, payload) =>
+      http.post(apiPath.admin.editStudent + '/' + id, payload),
+    deleteStudent: (id) => http.delete(apiPath.admin.deleteStudent + '/' + id),
+
+    // * ========= teacher ============
+    addTeacher: (payload) => http.post(apiPath.admin.addTeacher, payload),
+    bulkAddTeacher: (payload) =>
+      http.post(apiPath.admin.bulkAddTeacher, payload),
+    getAllTeacher: () => http.get(apiPath.admin.allTeacher),
+    editTeacher: (id, payload) =>
+      http.post(apiPath.admin.editTeacher + '/' + id, payload),
+    deleteTeacher: (id) => http.delete(apiPath.admin.deleteTeacher + '/' + id),
   },
 };

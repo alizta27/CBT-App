@@ -9,6 +9,12 @@ const appPath = {
     addStudent: '/admin/addStudent',
     library: '/admin/library',
   },
+  teacher: {
+    dashboard: '/teacher/dashboard',
+    addExam: '/teacher/addExam',
+    examList: '/teacher/examList',
+    examResult: '/teacher/examResult',
+  },
 };
 
 export default appPath;

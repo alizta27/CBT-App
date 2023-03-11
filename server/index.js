@@ -32,6 +32,24 @@ app
         next(error);
       }
     });
+    server.post('/admin/addStudent', (req, res, next) => {
+      try {
+        setTimeout(() => {
+          res.status(200).json({ status: 'done' });
+        }, 1000);
+      } catch (error) {
+        next(error);
+      }
+    });
+    server.post('/admin/addTeacher', (req, res, next) => {
+      try {
+        setTimeout(() => {
+          res.status(200).json({ status: 'done' });
+        }, 1000);
+      } catch (error) {
+        next(error);
+      }
+    });
 
     server.use('/api', routers);
 

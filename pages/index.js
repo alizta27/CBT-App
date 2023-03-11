@@ -106,8 +106,8 @@ export default function Login() {
                     <Form.Item label="Pilih Role" name="role">
                       <Radio.Group>
                         <Radio.Button value="admin">Admin</Radio.Button>
-                        <Radio.Button value="guru">Guru</Radio.Button>
-                        <Radio.Button value="siswa">Siswa</Radio.Button>
+                        <Radio.Button value="teacher">Guru</Radio.Button>
+                        <Radio.Button value="student">Siswa</Radio.Button>
                       </Radio.Group>
                     </Form.Item>
                     <Form.Item>

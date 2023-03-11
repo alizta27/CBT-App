@@ -11,6 +11,18 @@ const apiPath = {
     allClass: '/admin/all-class',
     editClass: '/admin/edit-class',
     deleteClass: 'admin/delete-class',
+
+    addStudent: '/admin/add-student',
+    bulkAddStudent: '/admin/bulk-add-student',
+    allStudent: '/admin/all-student',
+    editStudent: '/admin/edit-student',
+    deleteStudent: '/admin/delete-student',
+
+    addTeacher: '/admin/add-teaccher',
+    bulkAddTeacher: '/admin/bulk-add-teaccher',
+    allTeacher: '/admin/all-teaccher',
+    editTeacher: '/admin/edit-teaccher',
+    deleteTeacher: '/admin/delete-teaccher',
   },
   api: {
     admin: {
@@ -19,6 +31,18 @@ const apiPath = {
       allClass: '/all-class',
       editClass: '/edit-class/:id',
       deleteClass: '/delete-class/:id',
+
+      addStudent: '/add-student',
+      bulkAddStudent: '/bulk-add-student',
+      allStudent: '/all-student',
+      editStudent: '/edit-student/:id',
+      deleteStudent: '/delete-student/:id',
+
+      addTeacher: '/add-teaccher',
+      bulkAddTeacher: '/bulk-add-teaccher',
+      allTeacher: '/all-teaccher',
+      editTeacher: '/edit-teaccher/:id',
+      deleteTeacher: '/delete-teaccher/:id',
     },
   },
 };

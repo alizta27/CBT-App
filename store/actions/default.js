@@ -39,19 +39,22 @@ export const fetchLogin = (payload) => {
   };
 };
 
-export const fetchAuth = (payload) => {
+export const fetchAuth = () => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.IS_LOADING,
       payload: true,
     });
     try {
-      const { data } = await api.auth.getAuth(payload);
-
+      const { data } = await api.auth.getAuth();
       if (data) {
         dispatch({
           type: actionTypes.IS_ERROR,
           payload: null,
+        });
+        dispatch({
+          type: actionTypes.SET_ROLE,
+          payload: data.role,
         });
         return { data };
       } else {

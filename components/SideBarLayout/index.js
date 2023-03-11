@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Layout, theme } from 'antd';
 
 import { ReconciliationOutlined } from '@ant-design/icons';
 
 import { NavMenu } from './NavMenu';
 import NavHeader from './NavHeader';
-
-import appPath from '@/constant/appPath';
 
 import style from './styles.module.scss';
 

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Teacher.hasOne(models.Question);
+      Teacher.hasOne(models.Question, { foreignKey: 'teacher_id' });
     }
   }
   Teacher.init(
@@ -34,7 +34,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      full_name: DataTypes.STRING,
+      task: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      full_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,

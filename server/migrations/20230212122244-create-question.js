@@ -11,7 +11,7 @@ module.exports = {
         default: sequelize.fn('uuid_generate_v4'),
         primaryKey: true,
       },
-      exam_link: {
+      question_link: {
         type: Sequelize.STRING,
         allowNull: false,
       },

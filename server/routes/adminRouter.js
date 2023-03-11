@@ -1,15 +1,19 @@
 const controllers = require('../controllers');
 const apiPath = require('../../constant/apiPath');
 const express = require('express');
+const { authAdmin } = require('../middlewares/auth');
 const router = express.Router();
 
+router.use(authAdmin);
+
+//* ================== class ==========
 router.get(
   apiPath.api.admin.allClass,
   controllers.admin.ClassControler.getListClass
 );
 router.post(
   apiPath.api.admin.addClass,
-  controllers.admin.ClassControler.AddClassData
+  controllers.admin.ClassControler.addClassData
 );
 router.post(
   apiPath.api.admin.bulkAddClass,
@@ -22,6 +26,50 @@ router.post(
 router.delete(
   apiPath.api.admin.deleteClass,
   controllers.admin.ClassControler.deleteClass
+);
+
+//* ================== students ==========
+router.get(
+  apiPath.api.admin.allStudent,
+  controllers.admin.StudentController.getListStudent
+);
+router.post(
+  apiPath.api.admin.addStudent,
+  controllers.admin.StudentController.addStudentData
+);
+router.post(
+  apiPath.api.admin.bulkAddStudent,
+  controllers.admin.StudentController.bulkCreateStudent
+);
+router.post(
+  apiPath.api.admin.editStudent,
+  controllers.admin.StudentController.editStudent
+);
+router.delete(
+  apiPath.api.admin.deleteStudent,
+  controllers.admin.StudentController.deleteStudent
+);
+
+//* ================== teacher ==========
+router.get(
+  apiPath.api.admin.allTeacher,
+  controllers.admin.TeacherController.getListTeacher
+);
+router.post(
+  apiPath.api.admin.addTeacher,
+  controllers.admin.TeacherController.addTeacherData
+);
+router.post(
+  apiPath.api.admin.bulkAddTeacher,
+  controllers.admin.TeacherController.bulkCreateTeacher
+);
+router.post(
+  apiPath.api.admin.editTeacher,
+  controllers.admin.TeacherController.editTeacher
+);
+router.delete(
+  apiPath.api.admin.deleteTeacher,
+  controllers.admin.TeacherController.deleteTeacher
 );
 
 module.exports = router;

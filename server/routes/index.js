@@ -7,7 +7,7 @@ const Controller = require('../controllers/Controller');
 // const admin = require('./admin');
 const adminRouter = require('./adminRouter');
 // const profil = require('./profil');
-const authentification = require('../middlewares/auth');
+const { authentification } = require('../middlewares/auth');
 
 router.post(apiPath.login, Controller.login);
 router.post(apiPath.getAuth, Controller.getDataByAuth);

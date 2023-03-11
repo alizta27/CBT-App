@@ -3,10 +3,11 @@ const { Class } = require('../../models');
 const { v4: uuid } = require('uuid');
 
 class ClassController {
-  static async AddClassData(req, res, next) {
+  static async addClassData(req, res, next) {
     try {
       const { grade, name, total_student } = req.body;
       await Class.create({
+        id: uuid(),
         grade,
         name,
         total_student,

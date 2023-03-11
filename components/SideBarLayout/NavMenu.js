@@ -1,57 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Menu } from 'antd';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
 import appPath from '@/constant/appPath';
 
-import admin from './navItem';
+import { admin, teacher } from './navItem';
+import { handleBarTitle } from '@/utils/appHelper';
+import { fetchAuth } from '@/store/actions';
+import { getUserAuthToken } from '@/utils/authHelper';
 
 export function NavMenu({ setBarTitle }) {
   const { role } = useSelector(({ common }) => common);
+  const dispatch = useDispatch();
   const router = useRouter();
   const { asPath } = router;
 
   const [selectedMenu, setSelectedMenu] = useState('/');
+  const [navItems, setNavItems] = useState([]);
 
   useEffect(() => {
     setSelectedMenu(asPath);
   }, [asPath]);
 
-  const handleBarTitle = (value) => {
-    switch (value) {
-      case appPath.admin.dashboard:
-        setBarTitle('Dashboard');
-        break;
-      case appPath.admin.classList:
-        setBarTitle('Daftar Kelas');
-        break;
-      case appPath.admin.addClass:
-        setBarTitle('Tambah Kelas');
-        break;
-      case appPath.admin.teacherList:
-        setBarTitle('Daftar Guru');
-        break;
-      case appPath.admin.addTeacher:
-        setBarTitle('Tambah Guru');
-        break;
-      case appPath.admin.studentList:
-        setBarTitle('Daftar Siswa');
-        break;
-      case appPath.admin.addStudent:
-        setBarTitle('Tambah Siswa');
-        break;
-
-      default:
-        setBarTitle('Dashboard');
-        break;
-    }
-  };
-
   useEffect(() => {
     handleBarTitle(window?.location?.pathname);
   }, []);
+
+  useEffect(() => {
+    if (role) {
+      if (role === 'admin') {
+        setNavItems(admin);
+      } else if (role === 'teacher') {
+        setNavItems(teacher);
+      }
+    } else {
+      dispatch(fetchAuth());
+    }
+  }, [role]);
 
   return (
     <Menu
@@ -59,7 +46,7 @@ export function NavMenu({ setBarTitle }) {
       mode="inline"
       defaultSelectedKeys={['/']}
       selectedKeys={selectedMenu}
-      items={admin.map((item) => ({
+      items={navItems.map((item) => ({
         key: item.path,
         label: item.title,
         children: item?.children?.map((el) => ({
@@ -68,7 +55,7 @@ export function NavMenu({ setBarTitle }) {
         })),
       }))}
       onClick={({ key }) => {
-        handleBarTitle(key);
+        handleBarTitle(key, (title) => setBarTitle(title));
         setSelectedMenu(key);
         router.push(key);
       }}

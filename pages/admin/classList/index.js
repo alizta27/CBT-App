@@ -13,7 +13,7 @@ import {
 } from '@/store/actions';
 
 import styles from './styles.module.scss';
-import AddClassForm from '@/components/AddClassForm';
+import AddClassForm from '@/components/form';
 
 export default function ClassList() {
   const dispatch = useDispatch();
@@ -73,7 +73,6 @@ export default function ClassList() {
       });
       toggleEditModal();
     }
-    console.log('value: ', data.message);
   };
 
   const columns = [

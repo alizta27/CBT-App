@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Student.hasMany(models.Result);
-      Student.belongsTo(models.Class);
+      Student.belongsTo(models.Class, { foreignKey: 'class_id' });
     }
   }
   Student.init(
@@ -31,11 +31,34 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      full_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Username is required',
+          },
+          notEmpty: {
+            msg: 'Username is required',
+          },
+        },
+      },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      class_id: DataTypes.STRING,
+      class_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Class is required',
+          },
+          notEmpty: {
+            msg: 'Class is required',
+          },
+        },
+      },
     },
     {
       sequelize,
@@ -43,7 +66,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Student.beforeCreate((ins, option) => {
-    ins.password = hashingPassword(ins.password);
+    if (ins.password) {
+      ins.password = hashingPassword(ins.password);
+    }
   });
   return Student;
 };

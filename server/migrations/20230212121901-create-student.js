@@ -11,6 +11,10 @@ module.exports = {
         default: sequelize.fn('uuid_generate_v4'),
         primaryKey: true,
       },
+      full_name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       username: {
         type: Sequelize.STRING,
         unique: true,
