@@ -18,12 +18,21 @@ const apiPath = {
     editStudent: '/admin/edit-student',
     deleteStudent: '/admin/delete-student',
 
-    addTeacher: '/admin/add-teaccher',
-    bulkAddTeacher: '/admin/bulk-add-teaccher',
-    allTeacher: '/admin/all-teaccher',
-    editTeacher: '/admin/edit-teaccher',
-    deleteTeacher: '/admin/delete-teaccher',
+    addTeacher: '/admin/add-teacher',
+    bulkAddTeacher: '/admin/bulk-add-teacher',
+    allTeacher: '/admin/all-teacher',
+    editTeacher: '/admin/edit-teacher',
+    deleteTeacher: '/admin/delete-teacher',
   },
+
+  teacher: {
+    addQuestion: 'teacher/add-question',
+    bulkAddQuestion: 'teacher/bulk-add-question',
+    allQuestion: '/teacher/all-question',
+    editQuestion: '/teacher/edit-question',
+    deleteQuestion: '/teacher/delete-question',
+  },
+
   api: {
     admin: {
       addClass: '/add-class',
@@ -38,11 +47,19 @@ const apiPath = {
       editStudent: '/edit-student/:id',
       deleteStudent: '/delete-student/:id',
 
-      addTeacher: '/add-teaccher',
-      bulkAddTeacher: '/bulk-add-teaccher',
-      allTeacher: '/all-teaccher',
-      editTeacher: '/edit-teaccher/:id',
-      deleteTeacher: '/delete-teaccher/:id',
+      addTeacher: '/add-teacher',
+      bulkAddTeacher: '/bulk-add-teacher',
+      allTeacher: '/all-teacher',
+      editTeacher: '/edit-teacher/:id',
+      deleteTeacher: '/delete-teacher/:id',
+    },
+
+    teacher: {
+      addQuestion: '/add-question',
+      bulkAddQuestion: '/bulk-add-question',
+      allQuestion: '/all-question',
+      editQuestion: '/edit-question/:id',
+      deleteQuestion: '/delete-question/:id',
     },
   },
 };

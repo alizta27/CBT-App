@@ -7,24 +7,26 @@ import {
   removeLocalUserDetails,
   removeUserAuthToken,
 } from '@/utils/authHelper';
+import LS_KEYS from '@/constant/localStorage';
 
 class HttpService {
   constructor() {
     this.baseURL = '/api';
-    this.authToken = getUserAuthToken();
+    this.authToken = localStorage.getItem(LS_KEYS.AUTH_TOKEN_KEY);
+
     this.createAxiosInstance();
     this.axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        // if (error.response?.status === STATUS_CODES.ERROR.UNAUTHORIZED) {
-        //   this.removeAuthTokenHeader();
-        //   removeLocalUserDetails();
-        //   removeUserAuthToken();
-        //   window.open(
-        //     `${window.location.origin}/login?ref=${window.location.pathname}`,
-        //     '_self'
-        //   );
-        // }
+        if (error.response?.status === STATUS_CODES.ERROR.UNAUTHORIZED) {
+          this.removeAuthTokenHeader();
+          removeLocalUserDetails();
+          removeUserAuthToken();
+          window.open(
+            `${window.location.origin}/login?ref=${window.location.pathname}`,
+            '_self'
+          );
+        }
 
         return Promise.reject(error);
       }

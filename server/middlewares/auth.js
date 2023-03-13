@@ -1,5 +1,5 @@
 const { verifyToken } = require('../helpers/helpers');
-const { Admin } = require('../models');
+const { Admin, Teacher, Student } = require('../models');
 
 const authentification = async (req, res, next) => {
   try {
@@ -9,8 +9,17 @@ const authentification = async (req, res, next) => {
       throw new Error('Invalid token');
     }
 
-    const id = checkToken.id;
-    const userLoginData = await Admin.findByPk(id);
+    const { id, role } = checkToken;
+
+    let userLoginData;
+
+    if (role === 'admin') {
+      userLoginData = await Admin.findByPk(id);
+    } else if (role === 'teacher') {
+      userLoginData = await Teacher.findByPk(id);
+    } else if (role === 'student') {
+      userLoginData = await Student.findByPk(id);
+    }
 
     if (!userLoginData) {
       throw new Error('Invalid token');

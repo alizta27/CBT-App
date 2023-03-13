@@ -13,7 +13,5 @@ export const CustomTable = ({ columns, data }) => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  return (
-    <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
-  );
+  return <Table columns={columns} dataSource={data} />;
 };

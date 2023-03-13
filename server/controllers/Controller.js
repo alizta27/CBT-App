@@ -43,7 +43,7 @@ class Controller {
           },
         });
       }
-      console.log('USER: ', user);
+
       if (!user) {
         throw new Error('Invalid email or password');
       }

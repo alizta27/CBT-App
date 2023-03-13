@@ -31,6 +31,18 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      class_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Classes',
+            key: 'id',
+          },
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

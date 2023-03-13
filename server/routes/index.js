@@ -6,6 +6,7 @@ const Controller = require('../controllers/Controller');
 // const controller = require('../controllers');
 // const admin = require('./admin');
 const adminRouter = require('./adminRouter');
+const teacherRouter = require('./teacherRouter');
 // const profil = require('./profil');
 const { authentification } = require('../middlewares/auth');
 
@@ -16,6 +17,7 @@ router.post(apiPath.getAuth, Controller.getDataByAuth);
 router.use(authentification);
 
 router.use('/admin', adminRouter);
+router.use('/teacher', teacherRouter);
 // router.use("/add", controller.admin.ClassControler.AddClassData);
 // router.use("/profil", profil);
 

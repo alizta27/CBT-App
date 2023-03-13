@@ -11,9 +11,9 @@ const appPath = {
   },
   teacher: {
     dashboard: '/teacher/dashboard',
-    addExam: '/teacher/addExam',
-    examList: '/teacher/examList',
-    examResult: '/teacher/examResult',
+    addQuestion: '/teacher/addQuestion',
+    questionList: '/teacher/questionList',
+    questionResult: '/teacher/questionResult',
   },
 };
 

@@ -78,4 +78,14 @@ export default {
       http.post(apiPath.admin.editTeacher + '/' + id, payload),
     deleteTeacher: (id) => http.delete(apiPath.admin.deleteTeacher + '/' + id),
   },
+  teacher: {
+    addQuestion: (payload) => http.post(apiPath.teacher.addQuestion, payload),
+    bulkAddQuestion: (payload) =>
+      http.post(apiPath.teacher.bulkAddQuestion, payload),
+    getAllQuestion: () => http.get(apiPath.teacher.allQuestion),
+    editQuestion: (id, payload) =>
+      http.post(apiPath.teacher.editQuestion + '/' + id, payload),
+    deleteQuestion: (id) =>
+      http.delete(apiPath.teacher.deleteQuestion + '/' + id),
+  },
 };

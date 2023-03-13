@@ -1,11 +1,12 @@
-const { Question } = require('../../models');
+const { Question, Class } = require('../../models');
 
 const { v4: uuid } = require('uuid');
 
 class QuestionControler {
   static async addQuestionData(req, res, next) {
     try {
-      const { question_link, answer, teacher_id } = req.body;
+      const { question_link, answer } = req.body;
+      const teacher_id = req?.userAccessLogin?.id;
       await Question.create({
         question_link,
         answer,
@@ -21,9 +22,11 @@ class QuestionControler {
 
   static async bulkCreateQuestion(req, res, next) {
     try {
+      const teacher_id = req?.userAccessLogin?.id;
       const body = req?.body?.map((el) => {
         return {
           ...el,
+          teacher_id,
           id: uuid(),
         };
       });
@@ -69,10 +72,17 @@ class QuestionControler {
 
   static async getListQuestion(req, res, next) {
     try {
-      const teacher_id = req.params.id;
+      const teacher_id = req?.userAccessLogin?.id;
       const questions = await Question.findAll({
         where: {
           teacher_id,
+        },
+        include: {
+          model: Class,
+          attributes: ['grade', 'name'],
+        },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
         },
       });
       res.status(200).json({ questions });

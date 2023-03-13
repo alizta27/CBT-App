@@ -10,27 +10,20 @@ import {
 } from 'antd';
 
 import { DragDrop } from '@/components';
-import AddExamForm from '@/components/form/AddExamForm';
+import AddQuestionForm from '@/components/form/AddQuestionForm';
 
 import { useDispatch } from 'react-redux';
-import { bulkAddClass } from '@/store/actions';
+import { bulkAddQuestion } from '@/store/actions';
 
 const { Text, Title } = Typography;
 
-export default function AddExam() {
+export default function AddQuestion() {
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
 
   const onDragDrop = async (data) => {
     if (data) {
-      const payload = data.map((el) => {
-        return {
-          grade: el.Tingkat,
-          total_student: el['Jumlah Siswa'],
-          name: el['Nama Kelas'],
-        };
-      });
-      const { data: dataApi } = await dispatch(bulkAddClass(payload));
+      const { data: dataApi } = await dispatch(bulkAddQuestion(data));
       if (dataApi) {
         api.success({
           message: `Success`,
@@ -59,7 +52,7 @@ export default function AddExam() {
       <Row gutter={24}>
         <Col span={12}>
           <Card title="Tambah Kelas" bordered={false}>
-            <AddExamForm />
+            <AddQuestionForm />
           </Card>
         </Col>
         <Col span={12}>

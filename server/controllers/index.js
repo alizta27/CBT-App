@@ -4,4 +4,7 @@ module.exports = {
     StudentController: require('./admin/StudentController'),
     TeacherController: require('./admin/TeacherController'),
   },
+  teacher: {
+    QuestionController: require('./teacher/QuestionController'),
+  },
 };

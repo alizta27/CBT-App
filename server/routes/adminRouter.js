@@ -4,13 +4,14 @@ const express = require('express');
 const { authAdmin } = require('../middlewares/auth');
 const router = express.Router();
 
-router.use(authAdmin);
-
 //* ================== class ==========
 router.get(
   apiPath.api.admin.allClass,
   controllers.admin.ClassControler.getListClass
 );
+
+router.use(authAdmin);
+
 router.post(
   apiPath.api.admin.addClass,
   controllers.admin.ClassControler.addClassData

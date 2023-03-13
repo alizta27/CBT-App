@@ -68,24 +68,24 @@ export const teacher = [
     path: appPath.teacher.dashboard,
   },
   {
-    key: 'exam',
+    key: 'question',
     title: 'Data Soal Ujian',
     children: [
       {
-        key: 'examList',
+        key: 'quextionList',
         title: 'Daftar Soal Ujian',
-        path: appPath.teacher.examList,
+        path: appPath.teacher.questionList,
       },
       {
-        key: 'addExam',
+        key: 'addQuestion',
         title: 'Tambah Soal Ujian',
-        path: appPath.teacher.addExam,
+        path: appPath.teacher.addQuestion,
       },
     ],
   },
   {
     key: 'reasult',
     title: 'Data Hasil Ujian',
-    path: appPath.teacher.examResult,
+    path: appPath.teacher.questionResult,
   },
 ];
