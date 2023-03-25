@@ -10,6 +10,7 @@ import { DefaultLayout } from '@/components';
 
 import style from './Login.module.scss';
 import { getUserAuthToken, setUserAuthToken } from '@/utils/authHelper';
+import http from '@/api/http';
 
 export default function Login() {
   const [form] = Form.useForm();
@@ -36,6 +37,7 @@ export default function Login() {
     try {
       const { data } = await dispatch(fetchAuth(token));
       if (data?.role) {
+        http.refreshToken();
         router.push(`/${data.role}/dashboard`);
       } else {
         setIsLoading(false);
@@ -67,6 +69,7 @@ export default function Login() {
     if (data) {
       setUserAuthToken(data.token);
       if (data?.role) {
+        http.setAuthTokenHeader(data.token);
         router.push(`/${data.role}/dashboard`);
       }
     }
@@ -85,38 +88,35 @@ export default function Login() {
         <DefaultLayout>
           <div className={style.wrapper}>
             <div className={style.box}>
-              <div className={style.container}>
-                <div className={style.rightContainer}>Selamat Datang</div>
-                <div className={style.leftContainer}>
-                  <Form
-                    onFinish={onFinish}
-                    form={form}
-                    layout="vertical"
-                    initialValues={{
-                      requiredMarkValue: roleType,
-                    }}
-                    onValuesChange={onRoleTypeChange}
-                  >
-                    <Form.Item label="Username" name="username">
-                      <Input placeholder="username" />
-                    </Form.Item>
-                    <Form.Item label="Password" name="password">
-                      <Input.Password placeholder="password" />
-                    </Form.Item>
-                    <Form.Item label="Pilih Role" name="role">
-                      <Radio.Group>
-                        <Radio.Button value="admin">Admin</Radio.Button>
-                        <Radio.Button value="teacher">Guru</Radio.Button>
-                        <Radio.Button value="student">Siswa</Radio.Button>
-                      </Radio.Group>
-                    </Form.Item>
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Login
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </div>
+              <div className={style.leftContainer}>
+                <Form
+                  onFinish={onFinish}
+                  form={form}
+                  layout="vertical"
+                  initialValues={{
+                    requiredMarkValue: roleType,
+                  }}
+                  onValuesChange={onRoleTypeChange}
+                >
+                  <Form.Item label="Username" name="username">
+                    <Input placeholder="username" />
+                  </Form.Item>
+                  <Form.Item label="Password" name="password">
+                    <Input.Password placeholder="password" />
+                  </Form.Item>
+                  <Form.Item label="Pilih Role" name="role">
+                    <Radio.Group>
+                      <Radio.Button value="admin">Admin</Radio.Button>
+                      <Radio.Button value="teacher">Guru</Radio.Button>
+                      <Radio.Button value="student">Siswa</Radio.Button>
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Login
+                    </Button>
+                  </Form.Item>
+                </Form>
               </div>
             </div>
           </div>

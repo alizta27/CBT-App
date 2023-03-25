@@ -20,6 +20,16 @@ module.exports = {
         unique: true,
         allowNull: false,
       },
+      nisn: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      nis: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+      },
       password: {
         type: Sequelize.STRING,
         allowNull: false,

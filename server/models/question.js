@@ -44,6 +44,42 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Name is required',
+          },
+          notEmpty: {
+            msg: 'Name is required',
+          },
+        },
+      },
+      duration: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Duration is required',
+          },
+          notEmpty: {
+            msg: 'Duration is required',
+          },
+        },
+      },
+      total_question: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Duration is required',
+          },
+          notEmpty: {
+            msg: 'Duration is required',
+          },
+        },
+      },
       teacher_id: DataTypes.UUID,
       class_id: DataTypes.UUID,
       status: DataTypes.INTEGER,

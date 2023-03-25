@@ -93,6 +93,14 @@ export default function StudentList() {
       dataIndex: 'userName',
     },
     {
+      title: 'NISN',
+      dataIndex: 'nisn',
+    },
+    {
+      title: 'NIS',
+      dataIndex: 'nis',
+    },
+    {
       title: 'Aksi',
       dataIndex: 'action',
     },
@@ -109,6 +117,8 @@ export default function StudentList() {
           fullName: el.full_name,
           className: `${el.Class.grade} ${el.Class.name}`,
           userName: el.username,
+          nisn: el.nisn,
+          nis: el.nis,
           totalStudents: el.total_student,
           action: (
             <div className={styles.buttonContainer}>
@@ -119,6 +129,8 @@ export default function StudentList() {
                     full_name: el.full_name,
                     class_id: el.class_id,
                     username: el.username,
+                    nisn: el.nisn,
+                    nis: el.nis,
                   });
                   toggleEditModal();
                 }}

@@ -89,3 +89,21 @@ export const teacher = [
     path: appPath.teacher.questionResult,
   },
 ];
+
+export const student = [
+  {
+    key: 'dashboard',
+    title: 'Dashboard',
+    path: appPath.teacher.dashboard,
+  },
+  {
+    key: 'exam',
+    title: 'Daftar Ujian',
+    path: appPath.student.exam,
+  },
+  {
+    key: 'reasult',
+    title: 'Daftar Hasil Ujian',
+    path: appPath.student.result,
+  },
+];

@@ -40,6 +40,10 @@ class HttpService {
     );
   }
 
+  refreshToken() {
+    this.authToken = getUserAuthToken();
+  }
+
   createAxiosInstance() {
     this.axios = axios.create({
       baseURL: this.baseURL ?? '',

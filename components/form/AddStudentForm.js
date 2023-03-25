@@ -72,6 +72,12 @@ export default function AddStudentForm({ onEditForm, editData, isEdit }) {
         <Form.Item label="Username" name="username">
           <Input placeholder="Username" required />
         </Form.Item>
+        <Form.Item label="NISN" name="nisn">
+          <Input placeholder="NISN" required />
+        </Form.Item>
+        <Form.Item label="NIS" name="nis">
+          <Input placeholder="NIS" required />
+        </Form.Item>
         <Form.Item label="Password" name="password">
           <Input type="password" placeholder="Password" required={!isEdit} />
         </Form.Item>

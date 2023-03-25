@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Modal, Button, notification, Typography, Tag } from 'antd';
+import {
+  Modal,
+  Button,
+  notification,
+  Typography,
+  Tag,
+  Radio,
+  Popover,
+  Row,
+  Space,
+} from 'antd';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
@@ -10,6 +20,7 @@ import {
   editQuestion,
   getAllQuestion,
   deleteQuestion as deleteQuestionAction,
+  setQuestionStatus,
 } from '@/store/actions';
 
 import AddQuestionForm from '@/components/form/AddQuestionForm';
@@ -103,17 +114,35 @@ export default function QuestionList() {
     },
   ];
 
+  const changeStatus = async (status, id) => {
+    const { data } = await dispatch(setQuestionStatus({ status, id }));
+    if (data) {
+      fetchData();
+      api.success({
+        message: `Success`,
+        description: data.message,
+        placement: 'topRight',
+      });
+    } else {
+      api.error({
+        message: `Error`,
+        description: 'Gagal mengupdate status. Coba lagi',
+        placement: 'topRight',
+      });
+    }
+  };
+
   const fetchData = async () => {
     const { data } = await dispatch(getAllQuestion());
 
     if (data) {
       setTotalData(data.questions?.length ?? 10);
-      console.log('ELL: ', data.questions);
       const newData = data.questions?.map((el, i) => {
+        let status = el.status;
         return {
           key: i,
           link: (
-            <Text ellipsis style={{ width: 500 }}>
+            <Text ellipsis style={{ width: 380 }}>
               <a href={el.question_link} target="_blank">
                 {el.question_link}
               </a>
@@ -121,9 +150,30 @@ export default function QuestionList() {
           ),
           class: `${el.Class.grade} - ${el.Class.name}`,
           status: (
-            <Tag color={el.status == 2 ? 'red' : 'green'}>
-              {el.status == 2 ? 'tidak aktif' : 'aktif'}
-            </Tag>
+            <Popover
+              trigger="click"
+              content={
+                <Space size={10} direction="vertical">
+                  <Row>
+                    <Radio.Group onChange={(e) => (status = e.target.value)}>
+                      <Radio value={1}>Aktif</Radio>
+                      <Radio value={2}>Tidak Aktif</Radio>
+                    </Radio.Group>
+                  </Row>
+                  <Button
+                    size="small"
+                    type="primary"
+                    onClick={() => changeStatus(status, el.id)}
+                  >
+                    Simpan
+                  </Button>
+                </Space>
+              }
+            >
+              <Tag color={el.status == 2 ? 'red' : 'green'}>
+                {el.status == 2 ? 'tidak aktif' : 'aktif'}
+              </Tag>
+            </Popover>
           ),
           result: (
             <Button
@@ -146,6 +196,8 @@ export default function QuestionList() {
                   setEditData({
                     id: el.id,
                     question_link: el.question_link,
+                    duration: el.duration,
+                    name: el.name,
                     answer: el.answer,
                     class_id: el.class_id,
                   });

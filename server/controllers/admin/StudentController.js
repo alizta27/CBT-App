@@ -8,13 +8,15 @@ const { getPagination, getPagingData } = require('../../helpers/pagination');
 class StudentController {
   static async addStudentData(req, res, next) {
     try {
-      const { full_name, username, password, class_id } = req.body;
+      const { full_name, username, password, class_id, nisn, nis } = req.body;
       await Student.create({
         id: uuid(),
         username,
         password,
         class_id,
         full_name,
+        nisn,
+        nis,
       });
 
       res.status(200).json({ message: 'berhasil menambahkan kelas' });

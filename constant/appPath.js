@@ -16,6 +16,11 @@ const appPath = {
     questionList: '/teacher/questionList',
     questionResult: '/teacher/questionResult',
   },
+  student: {
+    dashboard: '/student/dashboard',
+    exam: '/student/examList',
+    result: '/student/examResult',
+  },
 };
 
 export default appPath;

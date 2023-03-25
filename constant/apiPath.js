@@ -26,11 +26,18 @@ const apiPath = {
   },
 
   teacher: {
+    allQuestion: '/teacher/all-question',
+    allClass: '/teacher/all-class',
     addQuestion: 'teacher/add-question',
     bulkAddQuestion: 'teacher/bulk-add-question',
-    allQuestion: '/teacher/all-question',
     editQuestion: '/teacher/edit-question',
     deleteQuestion: '/teacher/delete-question',
+    changeStatus: '/teacher/change-status',
+  },
+  student: {
+    allQuestion: '/student/all-question',
+    profile: '/student/profile',
+    getOneQuestion: '/student/one-question',
   },
 
   api: {
@@ -55,11 +62,18 @@ const apiPath = {
     },
 
     teacher: {
+      allQuestion: '/all-question',
+      allClass: '/all-class',
       addQuestion: '/add-question',
       bulkAddQuestion: '/bulk-add-question',
-      allQuestion: '/all-question',
       editQuestion: '/edit-question/:id',
       deleteQuestion: '/delete-question/:id',
+      changeStatus: '/change-status',
+    },
+    student: {
+      allQuestion: '/all-question/:class_id',
+      getOneQuestion: '/one-question/:id',
+      profile: '/profile',
     },
   },
 };

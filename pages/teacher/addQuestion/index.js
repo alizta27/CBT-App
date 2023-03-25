@@ -56,11 +56,7 @@ export default function AddQuestion() {
           </Card>
         </Col>
         <Col span={12}>
-          <Card
-            title="Upload File"
-            bordered={false}
-            extra={<Button>Template</Button>}
-          >
+          <Card title="Upload File" bordered={false}>
             <DragDrop onDragDrop={onDragDrop} />
           </Card>
         </Col>

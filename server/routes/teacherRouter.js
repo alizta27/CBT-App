@@ -10,9 +10,17 @@ router.get(
   apiPath.api.teacher.allQuestion,
   controllers.teacher.QuestionController.getListQuestion
 );
+router.get(
+  apiPath.api.teacher.allClass,
+  controllers.teacher.ClassController.getListClass
+);
 router.post(
   apiPath.api.teacher.addQuestion,
   controllers.teacher.QuestionController.addQuestionData
+);
+router.post(
+  apiPath.api.teacher.changeStatus,
+  controllers.teacher.QuestionController.setQuestionStatus
 );
 router.post(
   apiPath.api.teacher.bulkAddQuestion,

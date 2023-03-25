@@ -98,5 +98,13 @@ export default {
       http.post(apiPath.teacher.editQuestion + '/' + id, payload),
     deleteQuestion: (id) =>
       http.delete(apiPath.teacher.deleteQuestion + '/' + id),
+    getAllClass: () => http.get(apiPath.teacher.allClass),
+    setQuestionStatus: (payload) =>
+      http.post(apiPath.teacher.changeStatus, payload),
+  },
+  student: {
+    getAllQuestion: (id) => http.get(apiPath.student.allQuestion + '/' + id),
+    getOneQuestion: (id) => http.get(apiPath.student.getOneQuestion + '/' + id),
+    getStudentProfile: () => http.get(apiPath.student.profile),
   },
 };

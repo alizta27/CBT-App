@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 import appPath from '@/constant/appPath';
 
-import { admin, teacher } from './navItem';
+import { admin, teacher, student } from './navItem';
 import { handleBarTitle } from '@/utils/appHelper';
 import { fetchAuth } from '@/store/actions';
 import { getUserAuthToken } from '@/utils/authHelper';
@@ -34,6 +34,8 @@ export function NavMenu({ setBarTitle }) {
         setNavItems(admin);
       } else if (role === 'teacher') {
         setNavItems(teacher);
+      } else if (role === 'student') {
+        setNavItems(student);
       }
     } else {
       dispatch(fetchAuth());

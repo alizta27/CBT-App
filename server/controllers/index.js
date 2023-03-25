@@ -6,5 +6,9 @@ module.exports = {
   },
   teacher: {
     QuestionController: require('./teacher/QuestionController'),
+    ClassController: require('./teacher/ClassController'),
+  },
+  student: {
+    StudentController: require('./student/StudentController'),
   },
 };

@@ -19,6 +19,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      duration: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      total_question: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       teacher_id: {
         type: DataTypes.UUID,
         allowNull: false,

@@ -47,6 +47,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      nisn: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      nis: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       class_id: {
         type: DataTypes.STRING,
         allowNull: false,

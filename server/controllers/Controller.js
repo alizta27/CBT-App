@@ -8,16 +8,16 @@ const {
 // const nodemailer = require('nodemailer');
 
 class Controller {
-  static async home(req, res, next) {
-    try {
-      const adminx = await Admin.findAll();
-      console.log('adminx: ', adminx);
-      res.status(200).json({ allSchools: '..x..' });
-      // return app.render(req, res, '/students', { title: 'this is title' });
-    } catch (error) {
-      next(error);
-    }
-  }
+  // static async home(req, res, next) {
+  //   try {
+  //     const adminx = await Admin.findAll();
+  //     console.log('adminx: ', adminx);
+  //     res.status(200).json({ allSchools: '..x..' });
+  //     // return app.render(req, res, '/students', { title: 'this is title' });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   static async login(req, res, next) {
     try {
@@ -36,7 +36,7 @@ class Controller {
             username,
           },
         });
-      } else if (role === 'STUDENT') {
+      } else if (role === 'student') {
         user = await Student.findOne({
           where: {
             username,
@@ -114,9 +114,7 @@ class Controller {
 
   static async getDataByAuth(req, res, next) {
     try {
-      console.log('hereee?');
       const auth_token = req.headers['auth-token'];
-      console.log('auth_token: ', auth_token);
 
       const { role } = verifyToken(auth_token);
       if (!role) {

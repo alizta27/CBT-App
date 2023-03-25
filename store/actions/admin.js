@@ -385,9 +385,7 @@ export const addTeacher = (payload) => {
       payload: true,
     });
     try {
-      console.log('here?');
       const { data, status } = await api.admin.addTeacher(payload);
-      console.log('data: ', data);
       if (status === 200) {
         dispatch({
           type: actionTypes.IS_ERROR,

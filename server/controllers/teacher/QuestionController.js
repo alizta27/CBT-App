@@ -5,15 +5,17 @@ const { v4: uuid } = require('uuid');
 class QuestionControler {
   static async addQuestionData(req, res, next) {
     try {
-      const { question_link, answer, class_id } = req.body;
+      const { question_link, answer, class_id, name, duration } = req.body;
       const teacher_id = req?.userAccessLogin?.id;
       await Question.create({
+        status: 2,
+        id: uuid(),
         question_link,
         answer,
         teacher_id,
         class_id,
-        status: 2,
-        id: uuid(),
+        name,
+        duration,
       });
 
       res.status(200).json({ message: 'Berhasil menambahkan soal' });
@@ -85,9 +87,6 @@ class QuestionControler {
           {
             model: Class,
             attributes: ['grade', 'name'],
-            // through: {
-            //   attributes: ['question_id', 'class_id'],
-            // },
           },
         ],
       });
@@ -100,13 +99,10 @@ class QuestionControler {
 
   static async setQuestionStatus(req, res, next) {
     try {
-      const id = req.params.id;
-      const { body } = req;
-
+      const { status, id } = req.body;
       await Question.update(
         {
-          ...body,
-          status: body.status,
+          status: status,
         },
         {
           where: { id },

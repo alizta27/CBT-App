@@ -8,12 +8,16 @@ import { wrapper } from '@/store';
 import '@/styles/globals.css';
 import { SideBarLayout } from '@/components';
 import { getUserAuthToken } from '@/utils/authHelper';
+import http from '@/api/http';
 
 function App({ Component, ...rest }) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
   const router = useRouter();
   const [isInLogin, setIsInLogin] = useState(true);
+  const [isReady, setIsReady] = useState(false);
+
+  const isBrowser = () => typeof window !== 'undefined';
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -22,6 +26,13 @@ function App({ Component, ...rest }) {
       router.push('/');
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setIsReady(() => true);
+      http.refreshToken();
+    }
+  }, [isBrowser]);
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -36,11 +47,11 @@ function App({ Component, ...rest }) {
     <Provider store={store}>
       {isInLogin ? (
         <Component {...pageProps} />
-      ) : (
+      ) : isReady ? (
         <SideBarLayout>
           <Component {...pageProps} />
         </SideBarLayout>
-      )}
+      ) : null}
     </Provider>
   );
 }

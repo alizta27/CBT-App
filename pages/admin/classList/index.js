@@ -91,9 +91,12 @@ export default function ClassList() {
       dataIndex: 'totalStudents',
     },
     {
+      title: 'ID',
+      dataIndex: 'id',
+    },
+    {
       title: 'Aksi',
       dataIndex: 'action',
-      filterDropdown: <p>a</p>,
     },
   ];
 
@@ -108,6 +111,7 @@ export default function ClassList() {
           class: el.grade,
           className: el.name,
           totalStudents: el.total_student,
+          id: el.id,
           action: (
             <div className={styles.buttonContainer}>
               <Button
