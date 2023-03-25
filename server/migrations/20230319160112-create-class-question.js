@@ -1,30 +1,23 @@
 'use strict';
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Questions', {
+    await queryInterface.createTable('ClassQuestions', {
       id: {
         allowNull: false,
         type: DataTypes.UUID,
         default: sequelize.fn('uuid_generate_v4'),
         primaryKey: true,
       },
-      question_link: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      answer: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      teacher_id: {
-        type: DataTypes.UUID,
+      question_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: {
-            tableName: 'Teachers',
+            tableName: 'Questions',
             key: 'id',
           },
         },
@@ -32,7 +25,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       class_id: {
-        type: DataTypes.UUID,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: {
@@ -42,10 +35,6 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-      },
-      status: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -58,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Questions');
+    await queryInterface.dropTable('ClassQuestions');
   },
 };

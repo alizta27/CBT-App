@@ -23,12 +23,12 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      exam_id: {
-        type: DataTypes.UUID,
+      question_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: {
-            tableName: 'Exams',
+            tableName: 'Questions',
             key: 'id',
           },
         },

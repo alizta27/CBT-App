@@ -11,8 +11,35 @@ export default function AddQuestionForm({ onEditForm, editData }) {
   const dispatch = useDispatch();
 
   const [api, contextHolder] = notification.useNotification();
-
   const [classOptions, setClassOptions] = useState([]);
+
+  const onFinish = async (values) => {
+    if (onEditForm) {
+      onEditForm(values);
+      return;
+    }
+    const { class_id, answer, question_link } = values ?? {};
+    const payload = class_id?.map((el) => ({
+      answer,
+      question_link,
+      class_id: el,
+    }));
+
+    const { data: dataApi } = await dispatch(bulkAddQuestion(payload));
+    if (dataApi) {
+      api.success({
+        message: `Success`,
+        description: dataApi.message,
+        placement: 'topRight',
+      });
+    } else {
+      api.error({
+        message: `Error`,
+        description: 'Gagal menambahkan data. Coba lagi',
+        placement: 'topRight',
+      });
+    }
+  };
 
   const fetchAllClass = async () => {
     const { data } = await dispatch(getAllClass());
@@ -32,40 +59,9 @@ export default function AddQuestionForm({ onEditForm, editData }) {
     fetchAllClass();
   }, []);
 
-  const onFinish = async (values) => {
-    // if (onEditForm) {
-    //   onEditForm(values);
-    //   return;
-    // }
-
-    const { answer, class_id, question_link } = values;
-    const payload = class_id.map((el) => {
-      return {
-        answer,
-        question_link,
-        class_id: el,
-      };
-    });
-    console.log('payload: ', payload);
-
-    const { data: dataApi } = await dispatch(bulkAddQuestion(payload));
-    if (dataApi) {
-      api.success({
-        message: `Success`,
-        description: dataApi.message,
-        placement: 'topRight',
-      });
-    } else {
-      api.error({
-        message: `Error`,
-        description: 'Gagal menambahkan data. Coba lagi',
-        placement: 'topRight',
-      });
-    }
-  };
-
   useEffect(() => {
     if (editData && onEditForm) {
+      console.log('editData: ', editData);
       form.setFieldsValue(editData);
     }
   }, [onEditForm, editData]);
@@ -75,13 +71,13 @@ export default function AddQuestionForm({ onEditForm, editData }) {
       {contextHolder}
       <Form onFinish={onFinish} form={form} layout="vertical">
         <Form.Item label="Link Soal" name="question_link">
-          <Input placeholder="Link Soal" required />
+          <Input placeholder="Link Soal" required type="link" />
         </Form.Item>
         <Form.Item label="Kunci Jawaban" name="answer">
           <TextArea placeholder="Mata Pelajaran" required />
         </Form.Item>
         <Form.Item label="Kelas" name="class_id" required>
-          <Select options={classOptions} mode="multiple" allowClear />
+          <Select options={classOptions} mode={onEditForm ? '' : 'multiple'} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

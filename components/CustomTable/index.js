@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { Table, Button } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import React from 'react';
+import { Table } from 'antd';
 
-import styles from './styles.module.scss';
+export const CustomTable = ({ columns, data, pageSize, total, onChange }) => {
+  const pagination = {
+    pageSize: pageSize ?? 10,
+    total: total ?? 10,
+  };
 
-export const CustomTable = ({ columns, data }) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const onSelectChange = (newSelectedRowKeys) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  return <Table columns={columns} dataSource={data} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={data}
+      pagination={pagination}
+      onChange={onChange}
+    />
+  );
 };

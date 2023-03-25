@@ -55,9 +55,9 @@ export const admin = [
     ],
   },
   {
-    key: 'library',
-    title: 'Data Perpustakaan',
-    path: appPath.admin.library,
+    key: 'exam',
+    title: 'Data Ujian',
+    path: appPath.admin.createExam,
   },
 ];
 

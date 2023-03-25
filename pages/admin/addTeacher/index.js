@@ -13,8 +13,6 @@ import { DragDrop } from '@/components';
 
 import { useDispatch } from 'react-redux';
 import { bulkAddTeacher } from '@/store/actions';
-
-import styles from './styles.module.scss';
 import AddTeacherForm from '@/components/form/AddTeacherForm';
 
 const { Text, Title } = Typography;

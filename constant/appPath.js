@@ -8,6 +8,7 @@ const appPath = {
     studentList: '/admin/studentList',
     addStudent: '/admin/addStudent',
     library: '/admin/library',
+    createExam: '/admin/createExam',
   },
   teacher: {
     dashboard: '/teacher/dashboard',

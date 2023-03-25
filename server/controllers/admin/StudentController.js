@@ -1,7 +1,9 @@
 const { Student, Class } = require('../../models');
+const { Op } = require('sequelize');
 
 const { v4: uuid } = require('uuid');
 const { hashingPassword } = require('../../helpers/helpers');
+const { getPagination, getPagingData } = require('../../helpers/pagination');
 
 class StudentController {
   static async addStudentData(req, res, next) {
@@ -72,19 +74,36 @@ class StudentController {
 
   static async getListStudent(req, res, next) {
     try {
-      const students = await Student.findAll({
+      const { search, page, size } = req.query;
+
+      const { limit, offset } = getPagination(page, size);
+
+      const where = {};
+
+      if (search) {
+        where['full_name'] = {
+          [Op.startsWith]: `%${search}%`,
+        };
+      }
+
+      const students = await Student.findAndCountAll({
+        limit,
+        offset,
         include: [
           {
             model: Class,
             attributes: ['grade', 'name'],
           },
         ],
+        order: [['full_name', 'ASC']],
         attributes: {
           exclude: ['createdAt', 'updatedAt'],
         },
+        where,
       });
-      // const decryptPass  = students.password,
-      res.status(200).json({ students });
+      const response = getPagingData(students, page, limit);
+
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }

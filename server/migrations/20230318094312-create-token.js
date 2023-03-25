@@ -5,42 +5,18 @@ const sequelize = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Exams', {
+    await queryInterface.createTable('Tokens', {
       id: {
         allowNull: false,
-        primaryKey: true,
         type: DataTypes.UUID,
         default: sequelize.fn('uuid_generate_v4'),
+        primaryKey: true,
       },
-      question_id: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: {
-            tableName: 'Questions',
-            key: 'id',
-          },
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      class_id: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: {
-            tableName: 'Classes',
-            key: 'id',
-          },
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      duration: {
+      expire: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      name: {
+      secret_token: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -55,6 +31,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Exams');
+    await queryInterface.dropTable('Tokens');
   },
 };

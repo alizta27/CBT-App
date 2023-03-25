@@ -10,12 +10,9 @@ import {
 } from 'antd';
 
 import { DragDrop } from '@/components';
-import AddClassForm from '@/components/form';
 
 import { useDispatch } from 'react-redux';
 import { bulkAddStudent } from '@/store/actions';
-
-import styles from './styles.module.scss';
 import AddStudentForm from '@/components/form/AddStudentForm';
 
 const { Text, Title } = Typography;

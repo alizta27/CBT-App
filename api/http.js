@@ -12,20 +12,27 @@ import LS_KEYS from '@/constant/localStorage';
 class HttpService {
   constructor() {
     this.baseURL = '/api';
-    this.authToken = localStorage.getItem(LS_KEYS.AUTH_TOKEN_KEY);
+    this.authToken = getUserAuthToken();
 
     this.createAxiosInstance();
     this.axios.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response?.status === STATUS_CODES.ERROR.UNAUTHORIZED) {
-          this.removeAuthTokenHeader();
-          removeLocalUserDetails();
-          removeUserAuthToken();
-          window.open(
-            `${window.location.origin}/login?ref=${window.location.pathname}`,
-            '_self'
-          );
+          if (typeof window !== 'undefined') {
+            const tmp = localStorage.getItem(LS_KEYS.AUTH_TOKEN_KEY);
+            if (!tmp) {
+              this.removeAuthTokenHeader();
+              removeLocalUserDetails();
+              removeUserAuthToken();
+              window.open(
+                `${window.location.origin}/?ref=${window.location.pathname}`,
+                '_self'
+              );
+            } else {
+              this.authToken = tmp;
+            }
+          }
         }
 
         return Promise.reject(error);

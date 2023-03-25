@@ -262,14 +262,18 @@ export const bulkAddStudent = (payload) => {
   };
 };
 
-export const getAllStudent = () => {
+export const getAllStudent = (page, limit, search) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.IS_LOADING,
       payload: true,
     });
     try {
-      const { data, status } = await api.admin.getAllStudent();
+      const { data, status } = await api.admin.getAllStudent(
+        page,
+        limit,
+        search
+      );
 
       if (status === 200) {
         dispatch({
@@ -449,14 +453,18 @@ export const bulkAddTeacher = (payload) => {
   };
 };
 
-export const getAllTeacher = () => {
+export const getAllTeacher = (page, limit, search) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.IS_LOADING,
       payload: true,
     });
     try {
-      const { data, status } = await api.admin.getAllTeacher();
+      const { data, status } = await api.admin.getAllTeacher(
+        page,
+        limit,
+        search
+      );
 
       if (status === 200) {
         dispatch({

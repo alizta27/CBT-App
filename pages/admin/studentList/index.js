@@ -19,9 +19,13 @@ export default function StudentList() {
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
 
-  const [classData, setClassData] = useState([]);
+  const [studentData, setStudentData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [editData, setEditData] = useState({});
+  const [totalData, setTotalData] = useState(1);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState('');
 
   const toggleEditModal = useCallback(() => {
     setIsOpenEditModal((prevState) => !prevState);
@@ -91,15 +95,15 @@ export default function StudentList() {
     {
       title: 'Aksi',
       dataIndex: 'action',
-      filterDropdown: <p>a</p>,
     },
   ];
 
   const fetchData = async () => {
-    const { data } = await dispatch(getAllStudent());
+    const { data } = await dispatch(getAllStudent(page, pageSize, search));
 
     if (data) {
-      const newData = data.students?.map((el, i) => {
+      setTotalData(data.totalItems);
+      const newData = data.data?.map((el, i) => {
         return {
           key: i,
           fullName: el.full_name,
@@ -135,7 +139,7 @@ export default function StudentList() {
           ),
         };
       });
-      setClassData(newData);
+      setStudentData(newData);
     }
   };
 
@@ -143,10 +147,28 @@ export default function StudentList() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [page, pageSize]);
+
   return (
     <>
       {contextHolder}
-      <CustomTable columns={columns} data={classData} />;
+      <CustomTable
+        pageSize={pageSize}
+        total={totalData}
+        onChange={(e) => {
+          const { current, pageSize } = e;
+          setPageSize(pageSize);
+          if (current > 1) {
+            setPage(current - 1);
+          } else {
+            setPage(0);
+          }
+        }}
+        columns={columns}
+        data={studentData}
+      />
       <Modal
         open={isOpenEditModal}
         title="Title"

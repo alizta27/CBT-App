@@ -17,16 +17,7 @@ export function SideBarLayout({ children }) {
 
   return (
     <Layout className={style.layoutContainer}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        // onBreakpoint={(broken) => {
-        //   console.log(broken);
-        // }}
-        // onCollapse={(collapsed, type) => {
-        //   console.log(collapsed, type);
-        // }}
-      >
+      <Sider breakpoint="lg" collapsedWidth="0">
         <div className={style.headerWrapper}>
           <ReconciliationOutlined
             style={{ fontSize: '30px', color: '#ffff' }}

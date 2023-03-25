@@ -112,14 +112,14 @@ export const getAllQuestion = () => {
   };
 };
 
-export const editClass = (id, payload) => {
+export const editQuestion = (id, payload) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.IS_LOADING,
       payload: true,
     });
     try {
-      const { data, status } = await api.admin.editClass(id, payload);
+      const { data, status } = await api.teacher.editQuestion(id, payload);
 
       if (status === 200) {
         dispatch({
@@ -149,14 +149,14 @@ export const editClass = (id, payload) => {
   };
 };
 
-export const deleteClass = (id) => {
+export const deleteQuestion = (id) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.IS_LOADING,
       payload: true,
     });
     try {
-      const { data, status } = await api.admin.deleteClass(id);
+      const { data, status } = await api.teacher.deleteQuestion(id);
 
       if (status === 200) {
         dispatch({

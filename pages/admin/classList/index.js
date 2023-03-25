@@ -22,6 +22,8 @@ export default function ClassList() {
   const [classData, setClassData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [editData, setEditData] = useState({});
+  const [totalData, setTotalData] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
 
   const toggleEditModal = useCallback(() => {
     setIsOpenEditModal((prevState) => !prevState);
@@ -99,6 +101,7 @@ export default function ClassList() {
     const { data } = await dispatch(getAllClass());
 
     if (data) {
+      setTotalData(data.class?.length ?? 10);
       const newData = data.class?.map((el, i) => {
         return {
           key: i,
@@ -145,7 +148,16 @@ export default function ClassList() {
   return (
     <>
       {contextHolder}
-      <CustomTable columns={columns} data={classData} />;
+      <CustomTable
+        columns={columns}
+        onChange={(e) => {
+          const { pageSize } = e;
+          setPageSize(pageSize);
+        }}
+        pageSize={pageSize}
+        data={classData}
+        total={totalData}
+      />
       <Modal
         open={isOpenEditModal}
         title="Title"

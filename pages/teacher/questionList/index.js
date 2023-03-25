@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Modal, Button, notification, Typography } from 'antd';
+import { Modal, Button, notification, Typography, Tag } from 'antd';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 import { CustomTable } from '@/components';
 
 import {
-  editClass,
+  editQuestion,
   getAllQuestion,
-  deleteClass as deleteClassAction,
+  deleteQuestion as deleteQuestionAction,
 } from '@/store/actions';
 
 import AddQuestionForm from '@/components/form/AddQuestionForm';
@@ -25,13 +25,15 @@ export default function QuestionList() {
   const [classData, setClassData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [editData, setEditData] = useState({});
+  const [totalData, setTotalData] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
 
   const toggleEditModal = useCallback(() => {
     setIsOpenEditModal((prevState) => !prevState);
   }, []);
 
-  const deleteClass = async (id) => {
-    const { data } = await dispatch(deleteClassAction(id));
+  const deleteQuestion = async (id) => {
+    const { data } = await dispatch(deleteQuestionAction(id));
     if (data) {
       fetchData();
       api.success({
@@ -52,14 +54,14 @@ export default function QuestionList() {
     Modal.warning({
       title: 'Apakah anda yakin?',
       content: 'Data yang anda hapus tidak dapat di kembalikan lagi',
-      onOk: () => deleteClass(id),
+      onOk: () => deleteQuestion(id),
       onCancel: () => {},
       okCancel: true,
     });
   };
 
-  const onEditClass = async (value) => {
-    const { data } = await dispatch(editClass(editData.id, value));
+  const onEditQuestion = async (value) => {
+    const { data } = await dispatch(editQuestion(editData.id, value));
     if (data) {
       fetchData();
       api.success({
@@ -88,6 +90,14 @@ export default function QuestionList() {
       dataIndex: 'class',
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+    },
+    {
+      title: 'Hasil',
+      dataIndex: 'result',
+    },
+    {
       title: 'Aksi',
       dataIndex: 'action',
     },
@@ -97,6 +107,8 @@ export default function QuestionList() {
     const { data } = await dispatch(getAllQuestion());
 
     if (data) {
+      setTotalData(data.questions?.length ?? 10);
+      console.log('ELL: ', data.questions);
       const newData = data.questions?.map((el, i) => {
         return {
           key: i,
@@ -107,16 +119,35 @@ export default function QuestionList() {
               </a>
             </Text>
           ),
-          class: `${el.Class.grade} ${el.Class.name}`,
+          class: `${el.Class.grade} - ${el.Class.name}`,
+          status: (
+            <Tag color={el.status == 2 ? 'red' : 'green'}>
+              {el.status == 2 ? 'tidak aktif' : 'aktif'}
+            </Tag>
+          ),
+          result: (
+            <Button
+              onClick={() => {
+                setEditData({
+                  id: el.id,
+                  question_link: el.question_link,
+                  answer: el.answer,
+                });
+                toggleEditModal();
+              }}
+            >
+              Lihat Hasil
+            </Button>
+          ),
           action: (
             <div className={styles.buttonContainer}>
               <Button
                 onClick={() => {
                   setEditData({
                     id: el.id,
-                    name: el.name,
-                    grade: el.grade,
-                    total_student: el.total_student,
+                    question_link: el.question_link,
+                    answer: el.answer,
+                    class_id: el.class_id,
                   });
                   toggleEditModal();
                 }}
@@ -148,7 +179,16 @@ export default function QuestionList() {
   return (
     <>
       {contextHolder}
-      <CustomTable columns={columns} data={classData} />;
+      <CustomTable
+        onChange={(e) => {
+          const { pageSize } = e;
+          setPageSize(pageSize);
+        }}
+        pageSize={pageSize}
+        total={totalData}
+        columns={columns}
+        data={classData}
+      />
       <Modal
         open={isOpenEditModal}
         title="Title"
@@ -160,7 +200,7 @@ export default function QuestionList() {
           </Button>,
         ]}
       >
-        <AddQuestionForm onEditForm={onEditClass} editData={editData} />
+        <AddQuestionForm onEditForm={onEditQuestion} editData={editData} />
       </Modal>
     </>
   );

@@ -19,9 +19,13 @@ export default function TeacherList() {
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
 
-  const [classData, setClassData] = useState([]);
+  const [teacherData, setTeacherData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [editData, setEditData] = useState({});
+  const [totalData, setTotalData] = useState(10);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState('');
 
   const toggleEditModal = useCallback(() => {
     setIsOpenEditModal((prevState) => !prevState);
@@ -95,10 +99,11 @@ export default function TeacherList() {
   ];
 
   const fetchData = async () => {
-    const { data } = await dispatch(getAllTeacher());
-
+    const { data } = await dispatch(getAllTeacher(page, pageSize, search));
     if (data) {
-      const newData = data.teachers?.map((el, i) => {
+      setTotalData(data.totalItems);
+
+      const newData = data.data?.map((el, i) => {
         return {
           key: i,
           fullName: el.full_name,
@@ -133,7 +138,7 @@ export default function TeacherList() {
           ),
         };
       });
-      setClassData(newData);
+      setTeacherData(newData);
     }
   };
 
@@ -141,10 +146,28 @@ export default function TeacherList() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [page, pageSize]);
+
   return (
     <>
       {contextHolder}
-      <CustomTable columns={columns} data={classData} />;
+      <CustomTable
+        columns={columns}
+        data={teacherData}
+        pageSize={pageSize}
+        total={totalData}
+        onChange={(e) => {
+          const { current, pageSize } = e;
+          setPageSize(pageSize);
+          if (current > 1) {
+            setPage(current - 1);
+          } else {
+            setPage(0);
+          }
+        }}
+      />
       <Modal
         open={isOpenEditModal}
         title="Title"

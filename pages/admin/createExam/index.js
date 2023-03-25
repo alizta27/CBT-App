@@ -9,15 +9,16 @@ import {
   notification,
 } from 'antd';
 
-import { DragDrop } from '@/components';
+import { CustomTable, DragDrop } from '@/components';
 import AddClassForm from '@/components/form';
 
 import { useDispatch } from 'react-redux';
 import { bulkAddClass } from '@/store/actions';
+import AddExamForm from '@/components/form/AddExamForm';
 
 const { Text, Title } = Typography;
 
-export default function AddClass() {
+export default function CreateExam() {
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
 
@@ -46,29 +47,44 @@ export default function AddClass() {
       }
     }
   };
+
+  const columns = [
+    {
+      title: 'Token',
+      dataIndex: 'token',
+    },
+    {
+      title: 'Durasi',
+      dataIndex: 'duration',
+    },
+    {
+      title: 'Aksi',
+      dataIndex: 'action',
+    },
+  ];
+
   return (
     <>
       {contextHolder}
-      <Title level={2}>Tambah Data Kelas</Title>
+      <Title level={2}>Tambah Data Ujian</Title>
       <Text>
-        Tambah Data Kelas dengan mengisi form di bawah ini atau dengan
-        mendowload template yang sudah disediakan dan menguploadnya melalu form
-        upload file.
+        Tambah Data Ujian dengan mengisi form di bawah ini dan buat token
+        sebagai syarat mengikuti ujian.
       </Text>
       <Divider />
       <Row gutter={24}>
         <Col span={12}>
-          <Card title="Tambah Kelas" bordered={false}>
-            <AddClassForm />
+          <Card title="Kelas" bordered={false}>
+            <AddExamForm />
           </Card>
         </Col>
         <Col span={12}>
           <Card
-            title="Upload File"
+            title="Token"
             bordered={false}
-            extra={<Button>Template</Button>}
+            extra={<Button>Buat Token</Button>}
           >
-            <DragDrop onDragDrop={onDragDrop} />
+            <CustomTable columns={columns} data={[]} />
           </Card>
         </Col>
       </Row>

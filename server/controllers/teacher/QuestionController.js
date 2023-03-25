@@ -5,16 +5,18 @@ const { v4: uuid } = require('uuid');
 class QuestionControler {
   static async addQuestionData(req, res, next) {
     try {
-      const { question_link, answer } = req.body;
+      const { question_link, answer, class_id } = req.body;
       const teacher_id = req?.userAccessLogin?.id;
       await Question.create({
         question_link,
         answer,
         teacher_id,
+        class_id,
+        status: 2,
         id: uuid(),
       });
 
-      res.status(200).json({ message: 'berhasil menambahkan soal' });
+      res.status(200).json({ message: 'Berhasil menambahkan soal' });
     } catch (error) {
       next(error);
     }
@@ -27,13 +29,14 @@ class QuestionControler {
         return {
           ...el,
           teacher_id,
+          status: 2,
           id: uuid(),
         };
       });
 
       await Question.bulkCreate(body);
 
-      res.status(200).json({ message: 'berhasil menambahkan soal' });
+      res.status(200).json({ message: 'Berhasil menambahkan soal' });
     } catch (error) {
       next(error);
     }
@@ -52,7 +55,7 @@ class QuestionControler {
           where: { id },
         }
       );
-      res.status(200).json({ message: 'berhasil mengedit soal' });
+      res.status(200).json({ message: 'Berhasil mengedit soal' });
     } catch (error) {
       next(error);
     }
@@ -73,19 +76,43 @@ class QuestionControler {
   static async getListQuestion(req, res, next) {
     try {
       const teacher_id = req?.userAccessLogin?.id;
+
       const questions = await Question.findAll({
         where: {
           teacher_id,
         },
-        include: {
-          model: Class,
-          attributes: ['grade', 'name'],
-        },
-        attributes: {
-          exclude: ['createdAt', 'updatedAt'],
-        },
+        include: [
+          {
+            model: Class,
+            attributes: ['grade', 'name'],
+            // through: {
+            //   attributes: ['question_id', 'class_id'],
+            // },
+          },
+        ],
       });
+
       res.status(200).json({ questions });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async setQuestionStatus(req, res, next) {
+    try {
+      const id = req.params.id;
+      const { body } = req;
+
+      await Question.update(
+        {
+          ...body,
+          status: body.status,
+        },
+        {
+          where: { id },
+        }
+      );
+      res.status(200).json({ message: 'Berhasil mengupdate status' });
     } catch (error) {
       next(error);
     }

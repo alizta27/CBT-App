@@ -1,4 +1,5 @@
 import apiPath from '@/constant/apiPath';
+import { PAGE_LIMIT } from '@/constant/appConstant';
 import axios from 'axios';
 import http from './http';
 
@@ -64,7 +65,12 @@ export default {
     addStudent: (payload) => http.post(apiPath.admin.addStudent, payload),
     bulkAddStudent: (payload) =>
       http.post(apiPath.admin.bulkAddStudent, payload),
-    getAllStudent: () => http.get(apiPath.admin.allStudent),
+    getAllStudent: (page, limit, search) =>
+      http.get(
+        `${apiPath.admin.allStudent}?page=${page ?? 0}&size=${
+          limit ?? PAGE_LIMIT
+        }&search=${search ?? ''}`
+      ),
     editStudent: (id, payload) =>
       http.post(apiPath.admin.editStudent + '/' + id, payload),
     deleteStudent: (id) => http.delete(apiPath.admin.deleteStudent + '/' + id),
@@ -73,7 +79,12 @@ export default {
     addTeacher: (payload) => http.post(apiPath.admin.addTeacher, payload),
     bulkAddTeacher: (payload) =>
       http.post(apiPath.admin.bulkAddTeacher, payload),
-    getAllTeacher: () => http.get(apiPath.admin.allTeacher),
+    getAllTeacher: (page, limit, search) =>
+      http.get(
+        `${apiPath.admin.allTeacher}?page=${page ?? 0}&size=${
+          limit ?? PAGE_LIMIT
+        }&search=${search ?? ''}`
+      ),
     editTeacher: (id, payload) =>
       http.post(apiPath.admin.editTeacher + '/' + id, payload),
     deleteTeacher: (id) => http.delete(apiPath.admin.deleteTeacher + '/' + id),

@@ -9,8 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Question.belongsTo(models.Class, { foreignKey: 'class_id' });
-      Question.belongsTo(models.Teacher, { foreignKey: 'teacher_id' });
+      Question.belongsTo(models.Class, {
+        foreignKey: 'class_id',
+      });
+      // Question.belongsToMany(models.Class, {
+      //   foreignKey: 'class_id',
+      //   through: models.ClassQuestion,
+      // });
     }
   }
   Question.init(
@@ -41,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       teacher_id: DataTypes.UUID,
       class_id: DataTypes.UUID,
+      status: DataTypes.INTEGER,
     },
     {
       sequelize,
