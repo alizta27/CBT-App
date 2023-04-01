@@ -55,9 +55,9 @@ export const admin = [
     ],
   },
   {
-    key: 'exam',
-    title: 'Data Ujian',
-    path: appPath.admin.createExam,
+    key: 'token',
+    title: 'Data Token',
+    path: appPath.admin.createToken,
   },
 ];
 
@@ -83,11 +83,6 @@ export const teacher = [
       },
     ],
   },
-  {
-    key: 'reasult',
-    title: 'Data Hasil Ujian',
-    path: appPath.teacher.questionResult,
-  },
 ];
 
 export const student = [
@@ -100,10 +95,5 @@ export const student = [
     key: 'exam',
     title: 'Daftar Ujian',
     path: appPath.student.exam,
-  },
-  {
-    key: 'reasult',
-    title: 'Daftar Hasil Ujian',
-    path: appPath.student.result,
   },
 ];

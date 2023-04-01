@@ -11,7 +11,12 @@ import {
   Space,
 } from 'antd';
 
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  AuditOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
 import { CustomTable } from '@/components';
@@ -21,11 +26,13 @@ import {
   getAllQuestion,
   deleteQuestion as deleteQuestionAction,
   setQuestionStatus,
+  getOneQuestion,
 } from '@/store/actions';
 
 import AddQuestionForm from '@/components/form/AddQuestionForm';
 
 import styles from './styles.module.scss';
+import { exportExcel } from '@/utils/appHelper';
 
 const { Text } = Typography;
 
@@ -35,12 +42,17 @@ export default function QuestionList() {
 
   const [classData, setClassData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenResultModal, setIsOpenResultModal] = useState(false);
+  const [resultData, setResultData] = useState([]);
   const [editData, setEditData] = useState({});
   const [totalData, setTotalData] = useState(10);
   const [pageSize, setPageSize] = useState(10);
 
   const toggleEditModal = useCallback(() => {
     setIsOpenEditModal((prevState) => !prevState);
+  }, []);
+  const toggleResultModal = useCallback(() => {
+    setIsOpenResultModal((prevState) => !prevState);
   }, []);
 
   const deleteQuestion = async (id) => {
@@ -114,6 +126,25 @@ export default function QuestionList() {
     },
   ];
 
+  const resultColumns = [
+    {
+      title: 'NIS',
+      dataIndex: 'nis',
+    },
+    {
+      title: 'Nisn',
+      dataIndex: 'nisn',
+    },
+    {
+      title: 'Nama',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Nilai',
+      dataIndex: 'result',
+    },
+  ];
+
   const changeStatus = async (status, id) => {
     const { data } = await dispatch(setQuestionStatus({ status, id }));
     if (data) {
@@ -132,6 +163,22 @@ export default function QuestionList() {
     }
   };
 
+  const fetchResultData = async (id) => {
+    const { data } = await dispatch(getOneQuestion(id));
+    const newData = data?.question?.Results?.map((el, i) => {
+      return {
+        key: i,
+        nis: el.Student.nis,
+        nisn: el.Student.nisn,
+        name: el.Student.full_name,
+        result: el.result,
+        task: data?.question?.name,
+      };
+    });
+    setResultData(newData ?? []);
+    toggleResultModal();
+  };
+
   const fetchData = async () => {
     const { data } = await dispatch(getAllQuestion());
 
@@ -142,7 +189,7 @@ export default function QuestionList() {
         return {
           key: i,
           link: (
-            <Text ellipsis style={{ width: 380 }}>
+            <Text ellipsis style={{ width: 400 }}>
               <a href={el.question_link} target="_blank">
                 {el.question_link}
               </a>
@@ -153,7 +200,7 @@ export default function QuestionList() {
             <Popover
               trigger="click"
               content={
-                <Space size={10} direction="vertical">
+                <Space size={15} direction="vertical" align="center">
                   <Row>
                     <Radio.Group onChange={(e) => (status = e.target.value)}>
                       <Radio value={1}>Aktif</Radio>
@@ -176,17 +223,8 @@ export default function QuestionList() {
             </Popover>
           ),
           result: (
-            <Button
-              onClick={() => {
-                setEditData({
-                  id: el.id,
-                  question_link: el.question_link,
-                  answer: el.answer,
-                });
-                toggleEditModal();
-              }}
-            >
-              Lihat Hasil
+            <Button onClick={() => fetchResultData(el.id)}>
+              <AuditOutlined />
             </Button>
           ),
           action: (
@@ -200,12 +238,12 @@ export default function QuestionList() {
                     name: el.name,
                     answer: el.answer,
                     class_id: el.class_id,
+                    total_question: el.total_question,
                   });
                   toggleEditModal();
                 }}
               >
                 <EditOutlined />
-                Edit
               </Button>
               <Button
                 danger
@@ -214,7 +252,6 @@ export default function QuestionList() {
                 }}
               >
                 <DeleteOutlined />
-                Hapus
               </Button>
             </div>
           ),
@@ -253,6 +290,25 @@ export default function QuestionList() {
         ]}
       >
         <AddQuestionForm onEditForm={onEditQuestion} editData={editData} />
+      </Modal>
+      <Modal
+        open={isOpenResultModal}
+        title="Title"
+        onOk={toggleResultModal}
+        onCancel={toggleResultModal}
+        footer={[
+          <Button
+            type="primary"
+            onClick={() => {
+              exportExcel(resultData[0]?.task, resultData);
+            }}
+          >
+            Download
+            <DownloadOutlined />
+          </Button>,
+        ]}
+      >
+        <CustomTable data={resultData} columns={resultColumns} />
       </Modal>
     </>
   );

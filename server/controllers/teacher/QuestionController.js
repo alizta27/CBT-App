@@ -1,4 +1,4 @@
-const { Question, Class } = require('../../models');
+const { Question, Class, Result, Student } = require('../../models');
 
 const { v4: uuid } = require('uuid');
 
@@ -109,6 +109,32 @@ class QuestionControler {
         }
       );
       res.status(200).json({ message: 'Berhasil mengupdate status' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getQuestionById(req, res, next) {
+    try {
+      const id = req?.params?.id;
+      const question = await Question.findOne({
+        where: {
+          id,
+        },
+        include: [
+          {
+            model: Result,
+            attributes: ['result'],
+            include: {
+              model: Student,
+              attributes: ['full_name', 'nisn', 'nis'],
+            },
+          },
+        ],
+        attributes: ['name'],
+      });
+
+      res.status(200).json({ question });
     } catch (error) {
       next(error);
     }

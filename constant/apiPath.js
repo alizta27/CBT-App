@@ -3,8 +3,12 @@ const apiPath = {
   login: '/login',
   register: '/register',
   getAuth: '/getAuth',
-  student: {},
-  teacher: {},
+  token: {
+    getOneToken: '/token/getOneToken',
+    create: '/token/create',
+    delete: '/token/delete',
+    list: '/token/list',
+  },
   admin: {
     addClass: '/admin/add-class',
     bulkAddClass: '/admin/bulk-add-class',
@@ -26,6 +30,7 @@ const apiPath = {
   },
 
   teacher: {
+    getOneQuestion: '/teacher/one-question',
     allQuestion: '/teacher/all-question',
     allClass: '/teacher/all-class',
     addQuestion: 'teacher/add-question',
@@ -38,9 +43,18 @@ const apiPath = {
     allQuestion: '/student/all-question',
     profile: '/student/profile',
     getOneQuestion: '/student/one-question',
+    initResult: '/student/init-result',
+    collectResult: '/student/collect-result',
+    getResult: '/student/get-result',
   },
 
   api: {
+    token: {
+      create: '/create',
+      delete: '/delete/:id',
+      list: '/list',
+      getOneToken: '/getOneToken/:secret_token',
+    },
     admin: {
       addClass: '/add-class',
       bulkAddClass: '/bulk-add-class',
@@ -62,6 +76,7 @@ const apiPath = {
     },
 
     teacher: {
+      getOneQuestion: '/one-question/:id',
       allQuestion: '/all-question',
       allClass: '/all-class',
       addQuestion: '/add-question',
@@ -74,6 +89,9 @@ const apiPath = {
       allQuestion: '/all-question/:class_id',
       getOneQuestion: '/one-question/:id',
       profile: '/profile',
+      initResult: '/init-result',
+      collectResult: '/collect-result/:id',
+      getResult: '/get-result',
     },
   },
 };

@@ -12,10 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Question.belongsTo(models.Class, {
         foreignKey: 'class_id',
       });
-      // Question.belongsToMany(models.Class, {
-      //   foreignKey: 'class_id',
-      //   through: models.ClassQuestion,
-      // });
+      Question.hasMany(models.Result, { foreignKey: 'question_id' });
     }
   }
   Question.init(

@@ -12,8 +12,20 @@ router.get(
   controllers.student.StudentController.getStudentProfile
 );
 router.get(
+  apiPath.api.student.getResult,
+  controllers.student.StudentController.getResult
+);
+router.get(
   apiPath.api.student.getOneQuestion,
   controllers.student.StudentController.getQuestionById
+);
+router.post(
+  apiPath.api.student.initResult,
+  controllers.student.StudentController.initResult
+);
+router.post(
+  apiPath.api.student.collectResult,
+  controllers.student.StudentController.collectResult
 );
 
 module.exports = router;

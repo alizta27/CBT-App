@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Drawer,
   FloatButton,
@@ -9,12 +9,19 @@ import {
   Spin,
   Button,
   Divider,
+  Modal,
 } from 'antd';
 
-import { getOneQuestion } from '@/store/actions/student';
+import {
+  collectResult,
+  getOneQuestion,
+  initResult,
+} from '@/store/actions/student';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { FormOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { FormOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { Timer } from '@/components/Timer';
 
 const { useBreakpoint } = Grid;
 
@@ -27,9 +34,14 @@ export default function ExamPage() {
 
   const [qustionLink, setQuestionLink] = useState(null);
   const [qustionTotal, setQustionTotal] = useState([null]);
+  const [examDuration, setExamDuration] = useState(null);
+  const [resultId, setResultId] = useState('');
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(600);
+  const [start, setStart] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [value, setValue] = useState({});
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -37,10 +49,9 @@ export default function ExamPage() {
       setHeight(height);
       setWidth(width);
     }
-    // Client-side-only code
   });
 
-  const fetchQuestion = async () => {
+  const fetchQuestion = async (question_id) => {
     const { data: dataApi } = await dispatch(getOneQuestion(question_id));
     if (dataApi) {
       const arr = new Array(dataApi.question?.total_question)
@@ -49,6 +60,7 @@ export default function ExamPage() {
 
       setQuestionLink(dataApi.question?.question_link);
       setQustionTotal(arr);
+      setExamDuration(dataApi.question?.duration);
     } else {
       api.error({
         message: `Error`,
@@ -68,12 +80,52 @@ export default function ExamPage() {
     }
   }, [question_id]);
 
-  const onExamFinish = (value) => {
-    console.log('val: ', value);
+  const hideModal = async () => {
+    const { data: dataApi } = await dispatch(
+      initResult({
+        question_id: question_id.question_id,
+        start_time: moment().unix(),
+      })
+    );
+    if (dataApi) {
+      api.success({
+        message: `Success`,
+        description: dataApi.message,
+        placement: 'topRight',
+      });
+      setResultId(dataApi.id);
+      setOpen(false);
+      setStart(true);
+    } else {
+      api.error({
+        message: `Gagal`,
+        description: 'Coba lagi',
+        placement: 'topRight',
+      });
+      setOpen(false);
+    }
+  };
+
+  const onExamFinish = async (value) => {
+    let answer = '';
+    for (let i = 1; i <= qustionTotal.length; i++) {
+      if (value[i]) {
+        answer += value[i];
+      } else {
+        answer += '-';
+      }
+    }
+    await dispatch(
+      collectResult(resultId, {
+        answer,
+        end_time: moment().unix(),
+        question_id: question_id.question_id,
+      })
+    );
+    router.push('/student/examList');
   };
 
   const ExamContent = () => {
-    const [value, setValue] = useState({});
     const onChange = (e, number) => {
       const newValue = { ...value };
       newValue[number] = e.target.value;
@@ -88,7 +140,7 @@ export default function ExamPage() {
         }}
       >
         {qustionTotal.map((_, idx) => (
-          <>
+          <React.Fragment key={idx}>
             <Space direction="horizontal" style={{ marginBottom: 10 }}>
               <p>{idx + 1}. </p>
               <Radio.Group
@@ -107,7 +159,7 @@ export default function ExamPage() {
                 marginBottom: 10,
               }}
             />
-          </>
+          </React.Fragment>
         ))}
         <Button
           type="primary"
@@ -121,25 +173,52 @@ export default function ExamPage() {
   };
 
   return (
-    <div>
+    <>
       {contextHolder}
       {qustionLink ? (
-        <iframe
-          sandbox="allow-scripts allow-same-origin"
-          height={height - 180}
-          width={width - (md ? 700 : 400)}
-          src={
-            'https://drive.google.com/file/d/1731gwhmtVU1uM_PfAVOZjKuYPx3TO8Q7/preview'
-          }
-        ></iframe>
+        <>
+          <div
+            style={{
+              display: 'flex',
+              alignSelf: 'flex-end',
+              marginTop: -15,
+              marginBottom: 15,
+            }}
+          >
+            {examDuration && start ? (
+              <Timer
+                deadline={moment().add(examDuration, 'm').toDate()}
+                onFinish={onExamFinish}
+              />
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
+          <iframe
+            onLoad={() => setLoaded(true)}
+            sandbox="allow-scripts allow-same-origin"
+            height={height - 180}
+            width={width - (md ? 300 : 400)}
+            src={qustionLink}
+          ></iframe>
+          <Modal
+            open={!start}
+            closable={false}
+            footer={
+              <Button
+                size="small"
+                type="primary"
+                onClick={hideModal}
+                disabled={!loaded}
+              >
+                Mulai
+              </Button>
+            }
+          >
+            <p>Berdoalah sebelum mengerjakan soal</p>
+          </Modal>
+        </>
       ) : (
-        // <iframe
-        //   sandbox="allow-scripts allow-same-origin"
-        //   src="https://drive.google.com/file/d/1731gwhmtVU1uM_PfAVOZjKuYPx3TO8Q7/preview"
-        //   width="300"
-        //   height="480"
-        //   allow="autoplay"
-        // ></iframe>
         <div
           style={{
             display: 'flex',
@@ -165,6 +244,6 @@ export default function ExamPage() {
       >
         <ExamContent />
       </Drawer>
-    </div>
+    </>
   );
 }

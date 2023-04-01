@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Button, notification, Form, Input, Radio, Spin } from 'antd';
+import {
+  Button,
+  notification,
+  Form,
+  Input,
+  Radio,
+  Spin,
+  Card,
+  Space,
+} from 'antd';
 
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-
-import { fetchLogin, fetchAuth } from '@/store/actions';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 import { DefaultLayout } from '@/components';
 
-import style from './Login.module.scss';
+import { fetchLogin, fetchAuth } from '@/store/actions';
 import { getUserAuthToken, setUserAuthToken } from '@/utils/authHelper';
 import http from '@/api/http';
+
+import style from './Login.module.scss';
 
 export default function Login() {
   const [form] = Form.useForm();
@@ -83,11 +93,65 @@ export default function Login() {
     <>
       {contextHolder}
       {isLoading ? (
-        <Spin />
+        <div className={style.spinnerContainer}>
+          <Spin size="large" />
+        </div>
       ) : (
         <DefaultLayout>
           <div className={style.wrapper}>
-            <div className={style.box}>
+            <Card className={style.box}>
+              <Form
+                name="normal_login"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+              >
+                <Space size={20} direction="vertical">
+                  <Form.Item
+                    name="username"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your Username!',
+                      },
+                    ]}
+                  >
+                    <Input prefix={<UserOutlined />} placeholder="Username" />
+                  </Form.Item>
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your Password!',
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined />}
+                      type="password"
+                      placeholder="Password"
+                    />
+                  </Form.Item>
+                  <Form.Item name="role">
+                    <Radio.Group>
+                      <Radio.Button value="admin">Admin</Radio.Button>
+                      <Radio.Button value="teacher">Guru</Radio.Button>
+                      <Radio.Button value="student">Siswa</Radio.Button>
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className={style.loginFormBtn}
+                    >
+                      Log in
+                    </Button>
+                  </Form.Item>
+                </Space>
+              </Form>
+            </Card>
+            {/* <div className={style.box}>
               <div className={style.leftContainer}>
                 <Form
                   onFinish={onFinish}
@@ -118,7 +182,7 @@ export default function Login() {
                   </Form.Item>
                 </Form>
               </div>
-            </div>
+            </div> */}
           </div>
         </DefaultLayout>
       )}

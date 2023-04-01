@@ -7,6 +7,10 @@ const router = express.Router();
 router.use(authTeacher);
 
 router.get(
+  apiPath.api.teacher.getOneQuestion,
+  controllers.teacher.QuestionController.getQuestionById
+);
+router.get(
   apiPath.api.teacher.allQuestion,
   controllers.teacher.QuestionController.getListQuestion
 );

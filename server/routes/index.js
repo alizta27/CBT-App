@@ -6,6 +6,7 @@ const Controller = require('../controllers/Controller');
 const adminRouter = require('./adminRouter');
 const teacherRouter = require('./teacherRouter');
 const studentRouter = require('./studentRouter');
+const tokenRouter = require('./tokenRouter');
 
 const { authentification } = require('../middlewares/auth');
 
@@ -17,5 +18,6 @@ router.use(authentification);
 router.use('/admin', adminRouter);
 router.use('/teacher', teacherRouter);
 router.use('/student', studentRouter);
+router.use('/token', tokenRouter);
 
 module.exports = router;

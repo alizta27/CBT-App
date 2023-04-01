@@ -1,4 +1,4 @@
-const { Question, Class, Student } = require('../../models');
+const { Question, Class, Student, Result, sequelize } = require('../../models');
 const { Op } = require('sequelize');
 
 const { v4: uuid } = require('uuid');
@@ -60,6 +60,84 @@ class StudentController {
       });
 
       res.status(200).json({ question });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async initResult(req, res, next) {
+    try {
+      const { question_id, start_time } = req.body;
+      const student_id = req?.userAccessLogin?.id;
+      const result = await Result.create({
+        id: uuid(),
+        question_id,
+        student_id,
+        start_time,
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async collectResult(req, res, next) {
+    const t = await sequelize.transaction();
+    try {
+      const id = req.params.id;
+      const { question_id, answer, end_time } = req.body;
+      const question = await Question.findOne({
+        where: {
+          id: question_id,
+        },
+        attributes: ['answer'],
+      });
+      const questionAnswer = question.answer;
+
+      let correct = 0;
+      let result = 0;
+
+      for (let i = 0; i < questionAnswer.length; i++) {
+        if (questionAnswer[i] === answer[i]) {
+          correct++;
+        }
+      }
+      result = (correct / questionAnswer.length) * 100;
+
+      await Result.update(
+        {
+          end_time,
+          result,
+        },
+        {
+          where: { id },
+        }
+      );
+
+      await t.commit();
+      res.status(200).json('Hasil dikumpulkan');
+    } catch (error) {
+      await t.rollback();
+      next(error);
+    }
+  }
+
+  static async getResult(req, res, next) {
+    try {
+      const student_id = req?.userAccessLogin?.id;
+
+      const result = await Result.findAll({
+        where: {
+          student_id,
+        },
+        include: [
+          {
+            model: Question,
+            attributes: ['id', 'name'],
+          },
+        ],
+      });
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }

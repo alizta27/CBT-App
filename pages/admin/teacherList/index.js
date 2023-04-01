@@ -123,7 +123,6 @@ export default function TeacherList() {
                 }}
               >
                 <EditOutlined />
-                Edit
               </Button>
               <Button
                 danger
@@ -132,7 +131,6 @@ export default function TeacherList() {
                 }}
               >
                 <DeleteOutlined />
-                Hapus
               </Button>
             </div>
           ),

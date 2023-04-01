@@ -9,15 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Result.hasMany(models.Exam, { foreignKey: 'exam_id' });
       Result.belongsTo(models.Student, { foreignKey: 'student_id' });
+      Result.belongsTo(models.Question, { foreignKey: 'question_id' });
     }
   }
   Result.init(
     {
       student_id: DataTypes.STRING,
       result: DataTypes.STRING,
-      exam_id: DataTypes.STRING,
+      question_id: DataTypes.STRING,
+      start_time: DataTypes.INTEGER,
+      end_time: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -52,6 +52,12 @@ export default {
     login: (payload) => postRequest(base + apiPath.login, payload),
     getAuth: () => http.post(apiPath.getAuth),
   },
+  token: {
+    getOneToken: (token) => http.get(apiPath.token.getOneToken + '/' + token),
+    create: (payload) => http.post(apiPath.token.create, payload),
+    delete: (id) => http.delete(apiPath.token.delete + '/' + id),
+    list: () => http.get(apiPath.token.list),
+  },
   admin: {
     // * ========= Class ============
     addClass: (payload) => http.post(apiPath.admin.addClass, payload),
@@ -93,6 +99,7 @@ export default {
     addQuestion: (payload) => http.post(apiPath.teacher.addQuestion, payload),
     bulkAddQuestion: (payload) =>
       http.post(apiPath.teacher.bulkAddQuestion, payload),
+    getOneQuestion: (id) => http.get(apiPath.teacher.getOneQuestion + '/' + id),
     getAllQuestion: () => http.get(apiPath.teacher.allQuestion),
     editQuestion: (id, payload) =>
       http.post(apiPath.teacher.editQuestion + '/' + id, payload),
@@ -103,8 +110,12 @@ export default {
       http.post(apiPath.teacher.changeStatus, payload),
   },
   student: {
+    getResult: (id) => http.get(apiPath.student.getResult),
     getAllQuestion: (id) => http.get(apiPath.student.allQuestion + '/' + id),
     getOneQuestion: (id) => http.get(apiPath.student.getOneQuestion + '/' + id),
     getStudentProfile: () => http.get(apiPath.student.profile),
+    initResult: (payload) => http.post(apiPath.student.initResult, payload),
+    collectResult: (id, payload) =>
+      http.post(apiPath.student.collectResult + '/' + id, payload),
   },
 };

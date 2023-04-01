@@ -565,3 +565,113 @@ export const deleteTeacher = (id) => {
     }
   };
 };
+
+export const createToken = (token) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.IS_LOADING,
+      payload: true,
+    });
+    try {
+      const { data, status } = await api.token.create(token);
+
+      if (status === 200) {
+        dispatch({
+          type: actionTypes.IS_ERROR,
+          payload: null,
+        });
+        return { data };
+      } else {
+        dispatch({
+          type: actionTypes.IS_ERROR,
+          payload: data,
+        });
+        return { error: data };
+      }
+    } catch (error) {
+      dispatch({
+        type: actionTypes.IS_ERROR,
+        payload: error.message,
+      });
+      return { error: error.message };
+    } finally {
+      dispatch({
+        type: actionTypes.IS_LOADING,
+        payload: false,
+      });
+    }
+  };
+};
+export const deleteToken = (id) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.IS_LOADING,
+      payload: true,
+    });
+    try {
+      const { data, status } = await api.token.delete(id);
+
+      if (status === 200) {
+        dispatch({
+          type: actionTypes.IS_ERROR,
+          payload: null,
+        });
+        return { data };
+      } else {
+        dispatch({
+          type: actionTypes.IS_ERROR,
+          payload: data,
+        });
+        return { error: data };
+      }
+    } catch (error) {
+      dispatch({
+        type: actionTypes.IS_ERROR,
+        payload: error.message,
+      });
+      return { error: error.message };
+    } finally {
+      dispatch({
+        type: actionTypes.IS_LOADING,
+        payload: false,
+      });
+    }
+  };
+};
+
+export const listToken = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.IS_LOADING,
+      payload: true,
+    });
+    try {
+      const { data, status } = await api.token.list();
+
+      if (status === 200) {
+        dispatch({
+          type: actionTypes.IS_ERROR,
+          payload: null,
+        });
+        return { data };
+      } else {
+        dispatch({
+          type: actionTypes.IS_ERROR,
+          payload: data,
+        });
+        return { error: data };
+      }
+    } catch (error) {
+      dispatch({
+        type: actionTypes.IS_ERROR,
+        payload: error.message,
+      });
+      return { error: error.message };
+    } finally {
+      dispatch({
+        type: actionTypes.IS_LOADING,
+        payload: false,
+      });
+    }
+  };
+};

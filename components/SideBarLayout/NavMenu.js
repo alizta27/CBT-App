@@ -25,8 +25,8 @@ export function NavMenu({ setBarTitle }) {
   }, [asPath]);
 
   useEffect(() => {
-    handleBarTitle(window?.location?.pathname);
-  }, []);
+    handleBarTitle(window?.location?.pathname, (title) => setBarTitle(title));
+  }, [window?.location?.pathname]);
 
   useEffect(() => {
     if (role) {
@@ -57,7 +57,7 @@ export function NavMenu({ setBarTitle }) {
         })),
       }))}
       onClick={({ key }) => {
-        handleBarTitle(key, (title) => setBarTitle(title));
+        // handleBarTitle(key, (title) => setBarTitle(title));
         setSelectedMenu(key);
         router.push(key);
       }}

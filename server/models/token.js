@@ -13,8 +13,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Token.init(
     {
-      expire_date: DataTypes.INTEGER,
-      secret_token: DataTypes.STRING,
+      expire: DataTypes.STRING,
+      secret_token: {
+        type: DataTypes.STRING,
+        unique: {
+          msg: 'Token telah ada',
+        },
+      },
     },
     {
       sequelize,

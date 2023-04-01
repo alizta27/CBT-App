@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Modal, Button, notification, Input, Tag } from 'antd';
+import { Modal, Button, notification, Input } from 'antd';
 
 import { ExportOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
@@ -9,20 +9,17 @@ import { CustomTable } from '@/components';
 import styles from './styles.module.scss';
 import {
   getOneToken,
-  getResult,
   getStudentProfile,
   studentGetAllQuestion,
 } from '@/store/actions/student';
 import { useRouter } from 'next/router';
-import moment from 'moment';
 
 export default function ExamList() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [api, contextHolder] = notification.useNotification();
 
-  const [examData, setExamData] = useState([]);
-  const [allResult, setAllResult] = useState([]);
+  const [classData, setClassData] = useState([]);
   const [totalData, setTotalData] = useState(10);
   const [pageSize, setPageSize] = useState(10);
 
@@ -45,19 +42,6 @@ export default function ExamList() {
     setConfirmLoading(true);
     const { data: dataApi } = await dispatch(getOneToken(inputToken));
     if (dataApi?.token) {
-      const expire = +dataApi?.token.expire;
-      const now = moment().unix();
-
-      if (now > expire) {
-        api.error({
-          message: `Gagal`,
-          description: 'Token kadaluarsa. Coba lagi',
-          placement: 'topRight',
-        });
-        handleCancel();
-        setConfirmLoading(false);
-        return;
-      }
       api.success({
         message: `Success`,
         description: dataApi.message,
@@ -98,9 +82,7 @@ export default function ExamList() {
     if (student) {
       const { class_id } = student;
       const { data } = await dispatch(studentGetAllQuestion(class_id));
-      const { data: resultData } = await dispatch(getResult());
 
-      console.log('resultData: ', resultData);
       if (data) {
         setTotalData(data.questions?.length ?? 10);
         const newData = data.questions?.map((el, i) => {
@@ -109,29 +91,21 @@ export default function ExamList() {
             question: el.name,
             action: (
               <div className={styles.buttonContainer}>
-                {resultData.some((e) => e?.Question?.id === el.id) ? (
-                  <Tag color={resultData[i].result < 50 ? 'error' : 'green'}>
-                    <p style={{ fontWeight: 500 }}>
-                      Hasil: {resultData[i].result}
-                    </p>
-                  </Tag>
-                ) : (
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setSelectedQuestion(el.id);
-                      showModal();
-                    }}
-                  >
-                    <ExportOutlined />
-                    Masuk
-                  </Button>
-                )}
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setSelectedQuestion(el.id);
+                    showModal();
+                  }}
+                >
+                  <ExportOutlined />
+                  Masuk
+                </Button>
               </div>
             ),
           };
         });
-        setExamData(newData);
+        setClassData(newData);
       }
     }
   };
@@ -150,7 +124,7 @@ export default function ExamList() {
           setPageSize(pageSize);
         }}
         pageSize={pageSize}
-        data={examData}
+        data={classData}
         total={totalData}
       />
       <Modal

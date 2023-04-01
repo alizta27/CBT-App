@@ -39,6 +39,14 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      start_time: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      end_time: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

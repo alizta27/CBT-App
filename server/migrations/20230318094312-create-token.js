@@ -13,12 +13,13 @@ module.exports = {
         primaryKey: true,
       },
       expire: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       secret_token: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       createdAt: {
         allowNull: false,

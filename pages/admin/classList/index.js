@@ -126,7 +126,6 @@ export default function ClassList() {
                 }}
               >
                 <EditOutlined />
-                Edit
               </Button>
               <Button
                 danger
@@ -135,7 +134,6 @@ export default function ClassList() {
                 }}
               >
                 <DeleteOutlined />
-                Hapus
               </Button>
             </div>
           ),
@@ -164,7 +162,7 @@ export default function ClassList() {
       />
       <Modal
         open={isOpenEditModal}
-        title="Title"
+        title="Edit Kelas"
         onOk={toggleEditModal}
         onCancel={toggleEditModal}
         footer={[

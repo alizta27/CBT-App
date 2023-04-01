@@ -1,4 +1,4 @@
-const { Admin, Teacher, Student } = require('../models');
+const { Admin, Teacher, Student, Token } = require('../models');
 const {
   comparePassword,
   signToken,
@@ -6,19 +6,9 @@ const {
 } = require('../helpers/helpers.js');
 
 // const nodemailer = require('nodemailer');
+const { v4: uuid } = require('uuid');
 
 class Controller {
-  // static async home(req, res, next) {
-  //   try {
-  //     const adminx = await Admin.findAll();
-  //     console.log('adminx: ', adminx);
-  //     res.status(200).json({ allSchools: '..x..' });
-  //     // return app.render(req, res, '/students', { title: 'this is title' });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
   static async login(req, res, next) {
     try {
       let user = '';
@@ -69,48 +59,48 @@ class Controller {
     }
   }
 
-  static async register(req, res, next) {
-    try {
-      let user = '';
+  // static async register(req, res, next) {
+  //   try {
+  //     let user = '';
 
-      const { username, password, role } = req.body;
+  //     const { username, password, role } = req.body;
 
-      if (role === 'admin') {
-        user = await Admin.create({
-          username,
-          password,
-        });
-      }
+  //     if (role === 'admin') {
+  //       user = await Admin.create({
+  //         username,
+  //         password,
+  //       });
+  //     }
 
-      // var transporter = nodemailer.createTransport({
-      //   service: 'hotmail',
-      //   auth: {
-      //     user: 'alizta27@outlook.co.id',
-      //     pass: 'trythis007',
-      //   },
-      // });
+  //     // var transporter = nodemailer.createTransport({
+  //     //   service: 'hotmail',
+  //     //   auth: {
+  //     //     user: 'alizta27@outlook.co.id',
+  //     //     pass: 'trythis007',
+  //     //   },
+  //     // });
 
-      // let mailOptions = {
-      //   from: 'alizta27@outlook.co.id',
-      //   to: email,
-      //   subject: 'Sending Email using Nodejs',
-      //   text: `Akun anda adalah: ${email}, password: ${password}. Tolong jangan bagikan ke orang lain.`,
-      // };
+  //     // let mailOptions = {
+  //     //   from: 'alizta27@outlook.co.id',
+  //     //   to: email,
+  //     //   subject: 'Sending Email using Nodejs',
+  //     //   text: `Akun anda adalah: ${email}, password: ${password}. Tolong jangan bagikan ke orang lain.`,
+  //     // };
 
-      // transporter.sendMail(mailOptions, (err, info) => {
-      //   if (err) throw err;
-      //   console.log('Email sent: ' + info.response);
-      // });
+  //     // transporter.sendMail(mailOptions, (err, info) => {
+  //     //   if (err) throw err;
+  //     //   console.log('Email sent: ' + info.response);
+  //     // });
 
-      res.status(201).json({
-        message: 'User created successfully',
-        username: user.username,
-        role: user.role,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res.status(201).json({
+  //       message: 'User created successfully',
+  //       username: user.username,
+  //       role: user.role,
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   static async getDataByAuth(req, res, next) {
     try {
@@ -126,5 +116,59 @@ class Controller {
       next(error);
     }
   }
+
+  static async createToken(req, res, next) {
+    try {
+      const { expire, secret_token } = req.body;
+
+      const result = await Token.create({
+        id: uuid(),
+        expire,
+        secret_token,
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async deleteToken(req, res, next) {
+    try {
+      const { id } = req.params;
+      const token = await Token.destroy({
+        where: { id },
+      });
+      res.status(200).json({ token });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async listToken(req, res, next) {
+    try {
+      const token = await Token.findAll();
+      res.status(200).json(token);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getOneToken(req, res, next) {
+    try {
+      const { secret_token } = req.params;
+      const token = await Token.findOne({
+        where: { secret_token },
+      });
+      res.status(200).json({ token });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async listToken(req, res, next) {
+    try {
+      const token = await Token.findAll();
+      res.status(200).json(token);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
+
 module.exports = Controller;
