@@ -34,13 +34,11 @@ export default function ClassList() {
     if (data) {
       fetchData();
       api.success({
-        message: `Success`,
         description: data.message,
         placement: 'topRight',
       });
     } else {
       api.error({
-        message: `Error`,
         description: 'Gagal mengupdate data. Coba lagi',
         placement: 'topRight',
       });
@@ -62,14 +60,12 @@ export default function ClassList() {
     if (data) {
       fetchData();
       api.success({
-        message: `Success`,
         description: data.message,
         placement: 'topRight',
       });
       toggleEditModal();
     } else {
       api.error({
-        message: `Error`,
         description: 'Gagal mengupdate data. Coba lagi',
         placement: 'topRight',
       });

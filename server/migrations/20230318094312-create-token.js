@@ -16,6 +16,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      question_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Questions',
+            key: 'id',
+          },
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       secret_token: {
         type: Sequelize.STRING,
         allowNull: false,

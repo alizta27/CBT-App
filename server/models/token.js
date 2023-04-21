@@ -9,11 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Token.belongsTo(models.Question, { foreignKey: 'question_id' });
     }
   }
   Token.init(
     {
       expire: DataTypes.STRING,
+      question_id: DataTypes.STRING,
       secret_token: {
         type: DataTypes.STRING,
         unique: {

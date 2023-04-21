@@ -66,7 +66,7 @@ const authTeacher = async (req, res, next) => {
   try {
     const { role } = req.userAccessLogin;
 
-    if (role !== 'teacher') {
+    if (role !== 'teacher' && role !== 'admin') {
       throw new Error('Not Authorized');
     }
 

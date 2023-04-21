@@ -67,6 +67,18 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Status is required',
+          },
+          notEmpty: {
+            msg: 'Status is required',
+          },
+        },
+      },
     },
     {
       sequelize,

@@ -21,12 +21,6 @@ export default function NavHeader({ barTitle }) {
   const content = (
     <div className={style.popoverItem}>
       <div className={style.headerItemList}>
-        <Button type="text">
-          <UserOutlined />
-          <p>Profile</p>
-        </Button>
-      </div>
-      <div className={style.headerItemList}>
         <Button
           danger
           type="text"
@@ -51,27 +45,6 @@ export default function NavHeader({ barTitle }) {
       true
     );
   }, []);
-
-  const avatarItem = [
-    {
-      key: '1',
-      label: (
-        <div className={style.headerItemList}>
-          <UserOutlined />
-          <p>Profile</p>
-        </div>
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <div className={style.headerItemList}>
-          <LogoutOutlined />
-          <p>Log Out</p>
-        </div>
-      ),
-    },
-  ];
 
   return (
     <Header

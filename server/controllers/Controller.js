@@ -1,4 +1,11 @@
-const { Admin, Teacher, Student, Token } = require('../models');
+const {
+  Admin,
+  Teacher,
+  Student,
+  Token,
+  Question,
+  Class,
+} = require('../models');
 const {
   comparePassword,
   signToken,
@@ -119,14 +126,14 @@ class Controller {
 
   static async createToken(req, res, next) {
     try {
-      const { expire, secret_token } = req.body;
-
+      const { expire, secret_token, question_id } = req.body;
       const result = await Token.create({
         id: uuid(),
         expire,
         secret_token,
+        question_id,
       });
-      res.status(200).json(result);
+      res.status(200).json('Berhasil Menambahkan Token');
     } catch (error) {
       next(error);
     }
@@ -144,7 +151,20 @@ class Controller {
   }
   static async listToken(req, res, next) {
     try {
-      const token = await Token.findAll();
+      const token = await Token.findAll({
+        include: [
+          {
+            model: Question,
+            attributes: ['name'],
+            include: [
+              {
+                model: Class,
+                attributes: ['name', 'grade'],
+              },
+            ],
+          },
+        ],
+      });
       res.status(200).json(token);
     } catch (error) {
       next(error);
@@ -157,14 +177,6 @@ class Controller {
         where: { secret_token },
       });
       res.status(200).json({ token });
-    } catch (error) {
-      next(error);
-    }
-  }
-  static async listToken(req, res, next) {
-    try {
-      const token = await Token.findAll();
-      res.status(200).json(token);
     } catch (error) {
       next(error);
     }

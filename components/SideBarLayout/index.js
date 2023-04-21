@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, theme } from 'antd';
+import { Image, Layout, theme } from 'antd';
 
 import { ReconciliationOutlined } from '@ant-design/icons';
 
@@ -19,8 +19,10 @@ export function SideBarLayout({ children }) {
     <Layout className={style.layoutContainer}>
       <Sider breakpoint="lg" collapsedWidth="0">
         <div className={style.headerWrapper}>
-          <ReconciliationOutlined
-            style={{ fontSize: '30px', color: '#ffff' }}
+          <Image
+            alt="logo"
+            src="https://elearning.mipesrikdi.sch.id/__statics/upload/logo1656311603.png"
+            width={50}
           />
           <p>MIPESRI CBT</p>
         </div>

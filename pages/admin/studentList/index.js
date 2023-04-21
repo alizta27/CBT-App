@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Modal, Button, notification } from 'antd';
+import { Modal, Button, notification, Space, Input } from 'antd';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
@@ -36,13 +36,11 @@ export default function StudentList() {
     if (data) {
       fetchData();
       api.success({
-        message: `Success`,
         description: data.message,
         placement: 'topRight',
       });
     } else {
       api.error({
-        message: `Error`,
         description: 'Gagal mengupdate data. Coba lagi',
         placement: 'topRight',
       });
@@ -64,14 +62,12 @@ export default function StudentList() {
     if (data) {
       fetchData();
       api.success({
-        message: `Success`,
         description: data.message,
         placement: 'topRight',
       });
       toggleEditModal();
     } else {
       api.error({
-        message: `Error`,
         description: 'Gagal mengupdate data. Coba lagi',
         placement: 'topRight',
       });
@@ -101,6 +97,10 @@ export default function StudentList() {
       dataIndex: 'nis',
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+    },
+    {
       title: 'Aksi',
       dataIndex: 'action',
     },
@@ -119,6 +119,7 @@ export default function StudentList() {
           userName: el.username,
           nisn: el.nisn,
           nis: el.nis,
+          status: el.status === 1 ? 'Aktif' : 'Tidak Aktif',
           totalStudents: el.total_student,
           action: (
             <div className={styles.buttonContainer}>
@@ -131,6 +132,7 @@ export default function StudentList() {
                     username: el.username,
                     nisn: el.nisn,
                     nis: el.nis,
+                    status: el.status,
                   });
                   toggleEditModal();
                 }}
@@ -155,15 +157,14 @@ export default function StudentList() {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [page, pageSize]);
+  }, [page, pageSize, search]);
 
   return (
     <>
       {contextHolder}
+      <Space size={20} className={styles.space}>
+        <Input.Search onSearch={(e) => setSearch(e)} />
+      </Space>
       <CustomTable
         pageSize={pageSize}
         total={totalData}

@@ -26,13 +26,11 @@ export default function AddStudent() {
       const { data: dataApi } = await dispatch(bulkAddStudent(data));
       if (dataApi) {
         api.success({
-          message: `Success`,
           description: dataApi.message,
           placement: 'topRight',
         });
       } else {
         api.error({
-          message: `Error`,
           description: 'Gagal menambahkan data. Coba lagi',
           placement: 'topRight',
         });
@@ -51,7 +49,7 @@ export default function AddStudent() {
       <Divider />
       <Row gutter={24}>
         <Col span={12}>
-          <Card title="Tambah Kelas" bordered={false}>
+          <Card title="Tambah Siswa" bordered={false}>
             <AddStudentForm />
           </Card>
         </Col>

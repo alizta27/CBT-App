@@ -10,6 +10,8 @@ const appPath = {
     library: '/admin/library',
     createExam: '/admin/createExam',
     createToken: '/admin/createToken',
+    addQuestion: '/admin/addQuestion',
+    questionList: '/admin/questionList',
   },
   teacher: {
     dashboard: '/teacher/dashboard',

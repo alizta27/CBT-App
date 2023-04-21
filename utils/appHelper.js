@@ -2,6 +2,7 @@ import appPath from '@/constant/appPath';
 import * as XLSX from 'xlsx';
 
 export const handleBarTitle = (value, callback) => {
+  console.log('value: ', value);
   switch (value) {
     case appPath.admin.dashboard:
       if (callback) callback('Dashboard');
@@ -28,11 +29,13 @@ export const handleBarTitle = (value, callback) => {
       if (callback) callback('Tambah Token');
       break;
 
-    case appPath.teacher.addExam:
-      if (callback) callback('Tambah Data Ujian');
+    case appPath.teacher.addQuestion:
+    case appPath.admin.addQuestion:
+      if (callback) callback('Tambah Soal Ujian');
       break;
-    case appPath.teacher.examList:
-      if (callback) callback('List Data Ujian');
+    case appPath.teacher.questionList:
+    case appPath.admin.questionList:
+      if (callback) callback('List Soal Ujian');
       break;
 
     case appPath.student.exam:

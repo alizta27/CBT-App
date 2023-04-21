@@ -27,6 +27,8 @@ const apiPath = {
     allTeacher: '/admin/all-teacher',
     editTeacher: '/admin/edit-teacher',
     deleteTeacher: '/admin/delete-teacher',
+
+    allQuestion: '/admin/all-question',
   },
 
   teacher: {
@@ -73,6 +75,8 @@ const apiPath = {
       allTeacher: '/all-teacher',
       editTeacher: '/edit-teacher/:id',
       deleteTeacher: '/delete-teacher/:id',
+
+      allQuestion: '/all-question',
     },
 
     teacher: {

@@ -74,6 +74,7 @@ class StudentController {
         question_id,
         student_id,
         start_time,
+        result: null,
       });
       res.status(200).json(result);
     } catch (error) {

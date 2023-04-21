@@ -28,13 +28,11 @@ export default function AddQuestion() {
       const { data: dataApi } = await dispatch(bulkAddQuestion(data));
       if (dataApi) {
         api.success({
-          message: `Success`,
           description: dataApi.message,
           placement: 'topRight',
         });
       } else {
         api.error({
-          message: `Error`,
           description: 'Gagal menambahkan data. Coba lagi',
           placement: 'topRight',
         });

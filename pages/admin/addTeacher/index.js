@@ -26,13 +26,11 @@ export default function AddTeacher() {
       const { data: dataApi } = await dispatch(bulkAddTeacher(data));
       if (dataApi) {
         api.success({
-          message: `Success`,
           description: dataApi.message,
           placement: 'topRight',
         });
       } else {
         api.error({
-          message: `Error`,
           description: 'Gagal menambahkan data. Coba lagi',
           placement: 'topRight',
         });

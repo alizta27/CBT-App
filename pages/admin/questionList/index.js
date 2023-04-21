@@ -9,6 +9,7 @@ import {
   Popover,
   Row,
   Space,
+  Select,
 } from 'antd';
 
 import {
@@ -23,10 +24,11 @@ import { CustomTable } from '@/components';
 
 import {
   editQuestion,
-  getAllQuestion,
   deleteQuestion as deleteQuestionAction,
   setQuestionStatus,
   getOneQuestion,
+  adminGetAllQuestion,
+  getAllClass,
 } from '@/store/actions';
 
 import AddQuestionForm from '@/components/form/AddQuestionForm';
@@ -47,6 +49,8 @@ export default function QuestionList() {
   const [editData, setEditData] = useState({});
   const [totalData, setTotalData] = useState(10);
   const [pageSize, setPageSize] = useState(10);
+  const [classOptions, setClassOptions] = useState([]);
+  const [filter, setFilter] = useState({});
 
   const toggleEditModal = useCallback(() => {
     setIsOpenEditModal((prevState) => !prevState);
@@ -101,6 +105,10 @@ export default function QuestionList() {
 
   const columns = [
     {
+      title: 'Mapel',
+      dataIndex: 'mapel',
+    },
+    {
       title: 'Link',
       dataIndex: 'link',
     },
@@ -141,6 +149,24 @@ export default function QuestionList() {
     },
   ];
 
+  const fetchAllClass = async () => {
+    const { data } = await dispatch(getAllClass());
+
+    if (data) {
+      const newOptions = data?.class?.map((el) => {
+        return {
+          label: `${el.grade} ${el.name}`,
+          value: el.id,
+        };
+      });
+      setClassOptions(newOptions);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllClass();
+  }, []);
+
   const changeStatus = async (status, id) => {
     const { data } = await dispatch(setQuestionStatus({ status, id }));
     if (data) {
@@ -173,8 +199,8 @@ export default function QuestionList() {
     toggleResultModal();
   };
 
-  const fetchData = async () => {
-    const { data } = await dispatch(getAllQuestion());
+  const fetchData = async (params) => {
+    const { data } = await dispatch(adminGetAllQuestion(params));
 
     if (data) {
       setTotalData(data.questions?.length ?? 10);
@@ -182,6 +208,7 @@ export default function QuestionList() {
         let status = el.status;
         return {
           key: i,
+          mapel: el.name,
           link: (
             <Text ellipsis style={{ width: 400 }}>
               <a href={el.question_link} target="_blank">
@@ -233,6 +260,7 @@ export default function QuestionList() {
                     answer: el.answer,
                     class_id: el.class_id,
                     total_question: el.total_question,
+                    teacher_id: el.teacher_id,
                   });
                   toggleEditModal();
                 }}
@@ -256,12 +284,38 @@ export default function QuestionList() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(filter);
+  }, [filter]);
 
   return (
     <>
       {contextHolder}
+      <Space size={20} className={styles.space}>
+        <Space>
+          <p>Kelas</p>
+          <Select
+            value={filter.class_id}
+            placeholder="Filter Kelas"
+            options={classOptions}
+            onChange={(e) => setFilter({ ...filter, class_id: e })}
+          />
+        </Space>
+        <Space>
+          <p>Status</p>
+          <Select
+            value={filter.status}
+            placeholder="Filter Status"
+            options={[
+              { value: 1, label: 'Aktif' },
+              { value: 2, label: 'Tidak Aktif' },
+            ]}
+            onChange={(e) => setFilter({ ...filter, status: e })}
+          />
+        </Space>
+        <Button danger type="primary" onClick={() => setFilter({})}>
+          Reset Filter
+        </Button>
+      </Space>
       <CustomTable
         onChange={(e) => {
           const { pageSize } = e;
@@ -283,7 +337,11 @@ export default function QuestionList() {
           </Button>,
         ]}
       >
-        <AddQuestionForm onEditForm={onEditQuestion} editData={editData} />
+        <AddQuestionForm
+          onEditForm={onEditQuestion}
+          editData={editData}
+          isAdmin
+        />
       </Modal>
       <Modal
         open={isOpenResultModal}

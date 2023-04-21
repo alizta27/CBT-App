@@ -23,6 +23,8 @@ import { FormOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { Timer } from '@/components/Timer';
 
+import style from './styles.module.scss';
+
 const { useBreakpoint } = Grid;
 
 export default function ExamPage() {
@@ -32,16 +34,17 @@ export default function ExamPage() {
   const [api, contextHolder] = notification.useNotification();
   const { md } = useBreakpoint();
 
-  const [qustionLink, setQuestionLink] = useState(null);
+  const [questionLink, setQuestionLink] = useState(null);
   const [qustionTotal, setQustionTotal] = useState([null]);
   const [examDuration, setExamDuration] = useState(null);
   const [resultId, setResultId] = useState('');
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(600);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [value, setValue] = useState({});
+  const [allowCollect, setAllowCollect] = useState(false);
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -63,7 +66,17 @@ export default function ExamPage() {
       setExamDuration(dataApi.question?.duration);
     } else {
       api.error({
-        message: `Error`,
+        description: 'Gagal meload soal',
+        placement: 'topRight',
+      });
+    }
+  };
+  const refreshQuestion = async () => {
+    const { data: dataApi } = await dispatch(getOneQuestion(question_id));
+    if (dataApi) {
+      setQuestionLink(dataApi.question?.question_link);
+    } else {
+      api.error({
         description: 'Gagal meload soal',
         placement: 'topRight',
       });
@@ -88,13 +101,7 @@ export default function ExamPage() {
       })
     );
     if (dataApi) {
-      api.success({
-        message: `Success`,
-        description: dataApi.message,
-        placement: 'topRight',
-      });
       setResultId(dataApi.id);
-      setOpen(false);
       setStart(true);
     } else {
       api.error({
@@ -108,6 +115,20 @@ export default function ExamPage() {
 
   const onExamFinish = async (value) => {
     let answer = '';
+
+    if (Object.values(value).length !== qustionTotal.length) {
+      api.warning({
+        message: 'Silahkan jawab seluruh soal terlebih dahulu',
+      });
+      return;
+    }
+    if (!allowCollect) {
+      api.warning({
+        message: 'Anda belum mencukupi waktu minimal untuk mengumpulkan soal',
+      });
+      return;
+    }
+
     for (let i = 1; i <= qustionTotal.length; i++) {
       if (value[i]) {
         answer += value[i];
@@ -161,13 +182,15 @@ export default function ExamPage() {
             />
           </React.Fragment>
         ))}
-        <Button
-          type="primary"
-          style={{ marginTop: 20 }}
-          onClick={() => onExamFinish(value)}
-        >
-          Kumpul
-        </Button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            type="primary"
+            style={{ marginTop: 20 }}
+            onClick={() => onExamFinish(value)}
+          >
+            Kumpul
+          </Button>
+        </div>
       </div>
     );
   };
@@ -175,12 +198,13 @@ export default function ExamPage() {
   return (
     <>
       {contextHolder}
-      {qustionLink ? (
+      {questionLink ? (
         <>
           <div
             style={{
               display: 'flex',
-              alignSelf: 'flex-end',
+              width: '100%',
+              justifyContent: 'space-between',
               marginTop: -15,
               marginBottom: 15,
             }}
@@ -188,19 +212,33 @@ export default function ExamPage() {
             {examDuration && start ? (
               <Timer
                 deadline={moment().add(examDuration, 'm').toDate()}
-                onFinish={onExamFinish}
+                onFinish={() => onExamFinish(value)}
+                allowCollect={setAllowCollect}
               />
             ) : (
               <p>Loading...</p>
             )}
+            <Button type="primary" onClick={refreshQuestion}>
+              Refresh Soal
+            </Button>
           </div>
-          <iframe
-            onLoad={() => setLoaded(true)}
-            sandbox="allow-scripts allow-same-origin"
-            height={height - 180}
-            width={width - (md ? 300 : 400)}
-            src={qustionLink}
-          ></iframe>
+          <div className={style.container}>
+            <iframe
+              onLoad={() => setLoaded(true)}
+              sandbox="allow-scripts allow-same-origin"
+              height={height - 180}
+              width={width - (md ? 300 : 400)}
+              src={questionLink}
+            />
+            {open ? (
+              <div
+                className={style.answerContainer}
+                style={{ height: height - 180 }}
+              >
+                <ExamContent />
+              </div>
+            ) : null}
+          </div>
           <Modal
             open={!start}
             closable={false}
@@ -235,7 +273,7 @@ export default function ExamPage() {
         type="default"
         style={{ right: 25, bottom: 20, background: '#BEF0CB' }}
       />
-      <Drawer
+      {/* <Drawer
         width={width - (md ? 700 : 90)}
         title="Jawaban"
         placement="right"
@@ -243,7 +281,7 @@ export default function ExamPage() {
         open={open}
       >
         <ExamContent />
-      </Drawer>
+      </Drawer> */}
     </>
   );
 }

@@ -8,6 +8,8 @@ import {
   Spin,
   Card,
   Space,
+  Image,
+  Row,
 } from 'antd';
 
 import { useRouter } from 'next/router';
@@ -100,6 +102,13 @@ export default function Login() {
         <DefaultLayout>
           <div className={style.wrapper}>
             <Card className={style.box}>
+              <Row align="middle" justify="center" style={{ marginBottom: 20 }}>
+                <Image
+                  alt="logo"
+                  src="https://elearning.mipesrikdi.sch.id/__statics/upload/logo1656311603.png"
+                  width={100}
+                />
+              </Row>
               <Form
                 name="normal_login"
                 initialValues={{ remember: true }}

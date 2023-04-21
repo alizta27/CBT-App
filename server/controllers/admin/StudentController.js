@@ -8,18 +8,20 @@ const { getPagination, getPagingData } = require('../../helpers/pagination');
 class StudentController {
   static async addStudentData(req, res, next) {
     try {
-      const { full_name, username, password, class_id, nisn, nis } = req.body;
+      const { full_name, username, password, class_id, nisn, nis, status } =
+        req.body;
       await Student.create({
         id: uuid(),
         username,
         password,
         class_id,
         full_name,
+        status,
         nisn,
         nis,
       });
 
-      res.status(200).json({ message: 'berhasil menambahkan kelas' });
+      res.status(200).json({ message: 'berhasil menambahkan siswa' });
     } catch (error) {
       next(error);
     }
@@ -37,7 +39,7 @@ class StudentController {
 
       await Student.bulkCreate(body);
 
-      res.status(200).json({ message: 'berhasil menambahkan kelas' });
+      res.status(200).json({ message: 'berhasil menambahkan siswa' });
     } catch (error) {
       next(error);
     }

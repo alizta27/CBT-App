@@ -73,4 +73,10 @@ router.delete(
   controllers.admin.TeacherController.deleteTeacher
 );
 
+// * ========== Question ===========
+router.get(
+  apiPath.api.admin.allQuestion,
+  controllers.teacher.QuestionController.getAllListQuestion
+);
+
 module.exports = router;

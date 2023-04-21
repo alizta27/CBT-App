@@ -64,8 +64,8 @@ class HttpService {
     this.createAxiosInstance();
   }
 
-  get(url) {
-    return this.axios.get(url);
+  get(url, params) {
+    return this.axios.get(url, params);
   }
 
   post(url, payload) {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Modal, Button, notification, Input, Tag } from 'antd';
+import { Modal, Button, notification, Input, Tag, Result, Spin } from 'antd';
 
 import { ExportOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/router';
 import moment from 'moment';
 
-export default function ExamList() {
+function ExamListPage() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [api, contextHolder] = notification.useNotification();
@@ -25,6 +25,7 @@ export default function ExamList() {
   const [allResult, setAllResult] = useState([]);
   const [totalData, setTotalData] = useState(10);
   const [pageSize, setPageSize] = useState(10);
+  const [studentStatus, setStudentStatus] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -48,19 +49,19 @@ export default function ExamList() {
       const expire = +dataApi?.token.expire;
       const now = moment().unix();
 
-      if (now > expire) {
+      if (now > expire || dataApi.token.question_id !== selectedQuestion) {
         api.error({
           message: `Gagal`,
-          description: 'Token kadaluarsa. Coba lagi',
+          description: 'Token kadaluarsa atau salah. Coba lagi',
           placement: 'topRight',
         });
         handleCancel();
         setConfirmLoading(false);
         return;
       }
+
       api.success({
-        message: `Success`,
-        description: dataApi.message,
+        description: 'Token benar',
         placement: 'topRight',
       });
       handleCancel();
@@ -96,23 +97,24 @@ export default function ExamList() {
     const { student } = data;
 
     if (student) {
-      const { class_id } = student;
+      const { class_id, status } = student;
       const { data } = await dispatch(studentGetAllQuestion(class_id));
       const { data: resultData } = await dispatch(getResult());
-
-      console.log('resultData: ', resultData);
+      setStudentStatus(status);
       if (data) {
         setTotalData(data.questions?.length ?? 10);
         const newData = data.questions?.map((el, i) => {
+          const isHaveResult = resultData[i]?.result;
           return {
             key: i,
             question: el.name,
             action: (
               <div className={styles.buttonContainer}>
-                {resultData.some((e) => e?.Question?.id === el.id) ? (
-                  <Tag color={resultData[i].result < 50 ? 'error' : 'green'}>
+                {resultData.some((e) => e?.Question?.id === el.id) &&
+                isHaveResult ? (
+                  <Tag color={resultData[i]?.result < 50 ? 'error' : 'green'}>
                     <p style={{ fontWeight: 500 }}>
-                      Hasil: {resultData[i].result}
+                      Hasil: {resultData[i]?.result}
                     </p>
                   </Tag>
                 ) : (
@@ -143,28 +145,75 @@ export default function ExamList() {
   return (
     <>
       {contextHolder}
-      <CustomTable
-        columns={columns}
-        onChange={(e) => {
-          const { pageSize } = e;
-          setPageSize(pageSize);
-        }}
-        pageSize={pageSize}
-        data={examData}
-        total={totalData}
-      />
-      <Modal
-        title="Masukan Token"
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <Input
-          value={inputToken}
-          onChange={(e) => setInputToken(e.target.value)}
-        />
-      </Modal>
+      {studentStatus ? (
+        <>
+          <CustomTable
+            columns={columns}
+            onChange={(e) => {
+              const { pageSize } = e;
+              setPageSize(pageSize);
+            }}
+            pageSize={pageSize}
+            data={examData}
+            total={totalData}
+          />
+          <Modal
+            title="Masukan Token"
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <Input
+              value={inputToken}
+              onChange={(e) => setInputToken(e.target.value)}
+            />
+          </Modal>
+        </>
+      ) : null}
     </>
   );
+}
+
+function ExamBlockPage() {
+  return (
+    <Result
+      status="403"
+      title="Maaf, anda tidak bisa mengikuti ujian."
+      subTitle="Silahkan lunasi pembayaran anda untuk mengikuti ujian."
+    />
+  );
+}
+
+export default function ExamList() {
+  const dispatch = useDispatch();
+  const [status, setStatus] = useState(null);
+
+  const fetchStatus = async () => {
+    const { data } = await dispatch(getStudentProfile());
+    if (data) {
+      const { student } = data;
+      setStatus(student.status);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  if (!status) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'center',
+        }}
+      >
+        <Spin />
+      </div>
+    );
+  }
+
+  return status > 1 ? <ExamBlockPage /> : <ExamListPage />;
 }

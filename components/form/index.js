@@ -20,13 +20,11 @@ export default function AddClassForm({ onEditForm, editData }) {
     const { data: dataApi } = await dispatch(addClass(values));
     if (dataApi) {
       api.success({
-        message: `Success`,
         description: dataApi.message,
         placement: 'topRight',
       });
     } else {
       api.error({
-        message: `Error`,
         description: 'Gagal menambahkan data. Coba lagi',
         placement: 'topRight',
       });

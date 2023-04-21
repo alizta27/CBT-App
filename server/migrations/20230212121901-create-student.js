@@ -30,6 +30,10 @@ module.exports = {
         unique: true,
         allowNull: false,
       },
+      status: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       password: {
         type: Sequelize.STRING,
         allowNull: false,

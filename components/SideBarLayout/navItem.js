@@ -55,6 +55,22 @@ export const admin = [
     ],
   },
   {
+    key: 'question',
+    title: 'Data Soal Ujian',
+    children: [
+      {
+        key: 'quextionList',
+        title: 'Daftar Soal Ujian',
+        path: appPath.admin.questionList,
+      },
+      {
+        key: 'addQuestion',
+        title: 'Tambah Soal Ujian',
+        path: appPath.admin.addQuestion,
+      },
+    ],
+  },
+  {
     key: 'token',
     title: 'Data Token',
     path: appPath.admin.createToken,
@@ -89,7 +105,7 @@ export const student = [
   {
     key: 'dashboard',
     title: 'Dashboard',
-    path: appPath.teacher.dashboard,
+    path: appPath.student.dashboard,
   },
   {
     key: 'exam',

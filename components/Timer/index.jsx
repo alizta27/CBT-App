@@ -17,7 +17,11 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 
-export const Timer = ({ deadline = new Date().toString(), onFinish }) => {
+export const Timer = ({
+  deadline = new Date().toString(),
+  onFinish,
+  allowCollect,
+}) => {
   const parsedDeadline = useMemo(() => Date.parse(deadline), [deadline]);
   const [time, setTime] = useState(parsedDeadline - Date.now());
   const [onEnd, setOnEnd] = useState(false);
@@ -30,6 +34,12 @@ export const Timer = ({ deadline = new Date().toString(), onFinish }) => {
 
     return () => clearInterval(interval);
   }, [parsedDeadline]);
+
+  useEffect(() => {
+    if (Math.floor((time / MINUTE) % 60) < 15) {
+      allowCollect(true);
+    }
+  }, [time]);
 
   return (
     <>

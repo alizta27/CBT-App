@@ -94,6 +94,9 @@ export default {
     editTeacher: (id, payload) =>
       http.post(apiPath.admin.editTeacher + '/' + id, payload),
     deleteTeacher: (id) => http.delete(apiPath.admin.deleteTeacher + '/' + id),
+
+    // * ========= question ============
+    getAllQuestion: (params) => http.get(apiPath.admin.allQuestion, { params }),
   },
   teacher: {
     addQuestion: (payload) => http.post(apiPath.teacher.addQuestion, payload),

@@ -43,7 +43,6 @@ export default function ExamList() {
     const { data: dataApi } = await dispatch(getOneToken(inputToken));
     if (dataApi?.token) {
       api.success({
-        message: `Success`,
         description: dataApi.message,
         placement: 'topRight',
       });

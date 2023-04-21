@@ -1,18 +1,19 @@
 const { Question, Class, Result, Student } = require('../../models');
-
+const { Op } = require('sequelize');
 const { v4: uuid } = require('uuid');
 
 class QuestionControler {
   static async addQuestionData(req, res, next) {
     try {
-      const { question_link, answer, class_id, name, duration } = req.body;
-      const teacher_id = req?.userAccessLogin?.id;
+      const { question_link, answer, class_id, name, duration, teacher_id } =
+        req.body;
+      const teacher = req?.userAccessLogin?.id;
       await Question.create({
         status: 2,
         id: uuid(),
         question_link,
         answer,
-        teacher_id,
+        teacher_id: teacher_id ?? teacher,
         class_id,
         name,
         duration,
@@ -30,7 +31,7 @@ class QuestionControler {
       const body = req?.body?.map((el) => {
         return {
           ...el,
-          teacher_id,
+          teacher_id: el.teacher_id ?? teacher_id,
           status: 2,
           id: uuid(),
         };
@@ -83,6 +84,37 @@ class QuestionControler {
         where: {
           teacher_id,
         },
+        include: [
+          {
+            model: Class,
+            attributes: ['grade', 'name'],
+          },
+        ],
+      });
+
+      res.status(200).json({ questions });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getAllListQuestion(req, res, next) {
+    try {
+      console.log('req: ', req.query);
+      const { status, class_id } = req.query;
+      let where = {};
+
+      if (class_id) {
+        where = {
+          class_id,
+        };
+      }
+
+      if (status) {
+        where = { [Op.and]: [class_id ? { class_id } : {}, { status }] };
+      }
+      const questions = await Question.findAll({
+        where,
         include: [
           {
             model: Class,
