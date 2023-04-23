@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 
 import style from './styles.module.scss';
+import LS_KEYS from '@/constant/localStorage';
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
@@ -38,6 +39,13 @@ export const Timer = ({
   useEffect(() => {
     if (Math.floor((time / MINUTE) % 60) < 15) {
       allowCollect(true);
+    }
+
+    if (typeof window !== undefined) {
+      localStorage.setItem(
+        LS_KEYS.STUDENT_EXAM_DURATION,
+        Math.floor((time / MINUTE) % 60)
+      );
     }
   }, [time]);
 

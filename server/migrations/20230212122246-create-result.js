@@ -39,6 +39,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      answer: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       start_time: {
         type: DataTypes.INTEGER,
         allowNull: true,

@@ -109,6 +109,7 @@ class StudentController {
         {
           end_time,
           result,
+          answer,
         },
         {
           where: { id },

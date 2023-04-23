@@ -100,7 +100,6 @@ class QuestionControler {
 
   static async getAllListQuestion(req, res, next) {
     try {
-      console.log('req: ', req.query);
       const { status, class_id } = req.query;
       let where = {};
 
@@ -156,14 +155,14 @@ class QuestionControler {
         include: [
           {
             model: Result,
-            attributes: ['result'],
+            attributes: ['result', 'answer'],
             include: {
               model: Student,
               attributes: ['full_name', 'nisn', 'nis'],
             },
           },
         ],
-        attributes: ['name'],
+        attributes: ['name', 'answer'],
       });
 
       res.status(200).json({ question });

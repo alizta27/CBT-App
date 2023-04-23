@@ -147,6 +147,18 @@ export default function QuestionList() {
       title: 'Nilai',
       dataIndex: 'result',
     },
+    {
+      title: 'Kunci Jawaban',
+      dataIndex: 'answer',
+    },
+    {
+      title: 'Analisis Jawaban',
+      dataIndex: 'answerAnalysis',
+    },
+    {
+      title: 'Aksi',
+      dataIndex: 'action',
+    },
   ];
 
   const fetchAllClass = async () => {
@@ -185,13 +197,25 @@ export default function QuestionList() {
 
   const fetchResultData = async (id) => {
     const { data } = await dispatch(getOneQuestion(id));
+    let ansArr = [];
     const newData = data?.question?.Results?.map((el, i) => {
+      const studentAnswer = el.answer;
+      const keyAnswer = data?.question?.answer;
+      for (let i = 0; i < studentAnswer.length; i++) {
+        if (studentAnswer[i] === keyAnswer[i]) {
+          ansArr.push(<p>{studentAnswer[i]}</p>);
+        } else {
+          ansArr.push(<p style={{ color: 'red' }}>{studentAnswer[i]}</p>);
+        }
+      }
       return {
         key: i,
         nis: el.Student.nis,
         nisn: el.Student.nisn,
         name: el.Student.full_name,
         result: el.result,
+        answer: <p style={{ letterSpacing: 4 }}>{data?.question?.answer}</p>,
+        answerAnalysis: <Space size={4}>{ansArr}</Space>,
         task: data?.question?.name,
       };
     });
@@ -348,6 +372,14 @@ export default function QuestionList() {
         title="Title"
         onOk={toggleResultModal}
         onCancel={toggleResultModal}
+        width={() => {
+          if (typeof window !== undefined) {
+            const { innerWidth: width } = window;
+            return width - 500;
+          } else {
+            return 800;
+          }
+        }}
         footer={[
           <Button
             type="primary"

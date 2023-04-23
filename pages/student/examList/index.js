@@ -34,6 +34,32 @@ function ExamListPage() {
 
   const [inputToken, setInputToken] = useState('');
 
+  const [clipPermission, setClipPermission] = useState(false);
+  const [permissionModal, setPermissionModal] = useState(false);
+
+  useEffect(() => {
+    if (!clipPermission) {
+      setPermissionModal(true);
+    } else {
+      setPermissionModal(false);
+    }
+  }, [clipPermission]);
+
+  const checkPermission = async () => {
+    const permission = await navigator.permissions.query({
+      name: 'clipboard-read',
+    });
+    if (permission.state === 'granted') {
+      setClipPermission(true);
+      navigator.clipboard.writeText('');
+    } else {
+      setClipPermission(false);
+    }
+  };
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
   const showModal = () => {
     setOpen((prevState) => !prevState);
   };
@@ -104,13 +130,14 @@ function ExamListPage() {
       if (data) {
         setTotalData(data.questions?.length ?? 10);
         const newData = data.questions?.map((el, i) => {
-          const isHaveResult = resultData[i]?.result;
+          console.log('resultData: ', resultData[i]?.result);
+          const isHaveResult = resultData ? resultData[i]?.result : false;
           return {
             key: i,
             question: el.name,
             action: (
               <div className={styles.buttonContainer}>
-                {resultData.some((e) => e?.Question?.id === el.id) &&
+                {resultData?.some((e) => e?.Question?.id === el.id) &&
                 isHaveResult ? (
                   <Tag color={resultData[i]?.result < 50 ? 'error' : 'green'}>
                     <p style={{ fontWeight: 500 }}>
@@ -146,7 +173,7 @@ function ExamListPage() {
     <>
       {contextHolder}
       {studentStatus ? (
-        <>
+        <div className={clipPermission ? '' : styles.blur}>
           <CustomTable
             columns={columns}
             onChange={(e) => {
@@ -169,7 +196,19 @@ function ExamListPage() {
               onChange={(e) => setInputToken(e.target.value)}
             />
           </Modal>
-        </>
+          <Modal
+            title="Izinkan Membaca Clipboard Screenshoot"
+            open={permissionModal}
+            onOk={async () => {
+              const permite = await navigator.clipboard.read();
+              if (permite) {
+                window.location.reload(true);
+                setPermissionModal(false);
+              }
+            }}
+            onCancel={() => setPermissionModal(false)}
+          />
+        </div>
       ) : null}
     </>
   );
