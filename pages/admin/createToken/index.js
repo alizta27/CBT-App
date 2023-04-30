@@ -160,22 +160,27 @@ export default function CreateExam() {
     {
       title: 'Token',
       dataIndex: 'token',
+      key: 'token',
     },
     {
       title: 'Expire',
       dataIndex: 'expire',
+      key: 'expire',
     },
     {
       title: 'Soal',
       dataIndex: 'question_name',
+      key: 'question_name',
     },
     {
       title: 'Kelas',
       dataIndex: 'class_name',
+      key: 'class_name',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 

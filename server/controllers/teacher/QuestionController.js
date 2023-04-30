@@ -155,7 +155,7 @@ class QuestionControler {
         include: [
           {
             model: Result,
-            attributes: ['result', 'answer'],
+            attributes: ['id', 'result', 'answer'],
             include: {
               model: Student,
               attributes: ['full_name', 'nisn', 'nis'],

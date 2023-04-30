@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Modal,
   Button,
@@ -29,6 +29,7 @@ import {
   getOneQuestion,
   adminGetAllQuestion,
   getAllClass,
+  deleteResult as deleteResultAction,
 } from '@/store/actions';
 
 import AddQuestionForm from '@/components/form/AddQuestionForm';
@@ -69,7 +70,22 @@ export default function QuestionList() {
       });
     } else {
       api.error({
-        description: 'Gagal mengupdate data. Coba lagi',
+        description: 'Gagal menghapus data. Coba lagi',
+        placement: 'topRight',
+      });
+    }
+  };
+  const deleteResult = async (id) => {
+    const { data } = await dispatch(deleteResultAction(id));
+    if (data) {
+      fetchResultData();
+      api.success({
+        description: data.message,
+        placement: 'topRight',
+      });
+    } else {
+      api.error({
+        description: 'Gagal menghapus data. Coba lagi',
         placement: 'topRight',
       });
     }
@@ -80,6 +96,15 @@ export default function QuestionList() {
       title: 'Apakah anda yakin?',
       content: 'Data yang anda hapus tidak dapat di kembalikan lagi',
       onOk: () => deleteQuestion(id),
+      onCancel: () => {},
+      okCancel: true,
+    });
+  };
+  const deleteResultModal = (id) => {
+    Modal.warning({
+      title: 'Apakah anda yakin?',
+      content: 'Data yang anda hapus tidak dapat di kembalikan lagi',
+      onOk: () => deleteResult(id),
       onCancel: () => {},
       okCancel: true,
     });
@@ -107,26 +132,32 @@ export default function QuestionList() {
     {
       title: 'Mapel',
       dataIndex: 'mapel',
+      key: 'mapel',
     },
     {
       title: 'Link',
       dataIndex: 'link',
+      key: 'link',
     },
     {
       title: 'Kelas',
       dataIndex: 'class',
+      key: 'class',
     },
     {
       title: 'Status',
       dataIndex: 'status',
+      key: 'status',
     },
     {
       title: 'Hasil',
       dataIndex: 'result',
+      key: 'result',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 
@@ -134,30 +165,37 @@ export default function QuestionList() {
     {
       title: 'NIS',
       dataIndex: 'nis',
+      key: 'nis',
     },
     {
       title: 'Nisn',
       dataIndex: 'nisn',
+      key: 'nisn',
     },
     {
       title: 'Nama',
       dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Nilai',
       dataIndex: 'result',
+      key: 'result',
     },
     {
       title: 'Kunci Jawaban',
       dataIndex: 'answer',
+      key: 'answer',
     },
     {
       title: 'Analisis Jawaban',
       dataIndex: 'answerAnalysis',
+      key: 'answerAnalysis',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 
@@ -201,7 +239,7 @@ export default function QuestionList() {
     const newData = data?.question?.Results?.map((el, i) => {
       const studentAnswer = el.answer;
       const keyAnswer = data?.question?.answer;
-      for (let i = 0; i < studentAnswer.length; i++) {
+      for (let i = 0; i < studentAnswer?.length; i++) {
         if (studentAnswer[i] === keyAnswer[i]) {
           ansArr.push(<p>{studentAnswer[i]}</p>);
         } else {
@@ -215,7 +253,23 @@ export default function QuestionList() {
         name: el.Student.full_name,
         result: el.result,
         answer: <p style={{ letterSpacing: 4 }}>{data?.question?.answer}</p>,
-        answerAnalysis: <Space size={4}>{ansArr}</Space>,
+        answerAnalysis: (
+          <Space size={4}>
+            {ansArr.map((el, i) => (
+              <React.Fragment key={i}>{el}</React.Fragment>
+            ))}
+          </Space>
+        ),
+        action: (
+          <Button
+            danger
+            onClick={() => {
+              deleteResultModal(el.id);
+            }}
+          >
+            <DeleteOutlined />
+          </Button>
+        ),
         task: data?.question?.name,
       };
     });

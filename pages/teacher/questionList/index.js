@@ -103,22 +103,27 @@ export default function QuestionList() {
     {
       title: 'Link',
       dataIndex: 'link',
+      key: 'link',
     },
     {
       title: 'Kelas',
       dataIndex: 'class',
+      key: 'class',
     },
     {
       title: 'Status',
       dataIndex: 'status',
+      key: 'status',
     },
     {
       title: 'Hasil',
       dataIndex: 'result',
+      key: 'result',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 
@@ -126,18 +131,22 @@ export default function QuestionList() {
     {
       title: 'NIS',
       dataIndex: 'nis',
+      key: 'nis',
     },
     {
       title: 'Nisn',
       dataIndex: 'nisn',
+      key: 'nisn',
     },
     {
       title: 'Nama',
       dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Nilai',
       dataIndex: 'result',
+      key: 'result',
     },
   ];
 

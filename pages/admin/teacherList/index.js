@@ -79,18 +79,22 @@ export default function TeacherList() {
     {
       title: 'Nama Lengkap',
       dataIndex: 'fullName',
+      key: 'fullName',
     },
     {
       title: 'Mata Pelajaran',
       dataIndex: 'task',
+      key: 'task',
     },
     {
       title: 'Username',
       dataIndex: 'userName',
+      key: 'userName',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 

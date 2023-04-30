@@ -34,31 +34,31 @@ function ExamListPage() {
 
   const [inputToken, setInputToken] = useState('');
 
-  const [clipPermission, setClipPermission] = useState(false);
-  const [permissionModal, setPermissionModal] = useState(false);
+  // const [clipPermission, setClipPermission] = useState(false);
+  // const [permissionModal, setPermissionModal] = useState(false);
 
-  useEffect(() => {
-    if (!clipPermission) {
-      setPermissionModal(true);
-    } else {
-      setPermissionModal(false);
-    }
-  }, [clipPermission]);
+  // useEffect(() => {
+  //   if (!clipPermission) {
+  //     setPermissionModal(true);
+  //   } else {
+  //     setPermissionModal(false);
+  //   }
+  // }, [clipPermission]);
 
-  const checkPermission = async () => {
-    const permission = await navigator.permissions.query({
-      name: 'clipboard-read',
-    });
-    if (permission.state === 'granted') {
-      setClipPermission(true);
-      navigator.clipboard.writeText('');
-    } else {
-      setClipPermission(false);
-    }
-  };
-  useEffect(() => {
-    checkPermission();
-  }, []);
+  // const checkPermission = async () => {
+  //   const permission = await navigator.permissions.query({
+  //     name: 'clipboard-read',
+  //   });
+  //   if (permission.state === 'granted') {
+  //     setClipPermission(true);
+  //     navigator.clipboard.writeText('');
+  //   } else {
+  //     setClipPermission(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   checkPermission();
+  // }, []);
 
   const showModal = () => {
     setOpen((prevState) => !prevState);
@@ -111,10 +111,12 @@ function ExamListPage() {
     {
       title: 'Soal',
       dataIndex: 'question',
+      key: 'question',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 
@@ -130,7 +132,6 @@ function ExamListPage() {
       if (data) {
         setTotalData(data.questions?.length ?? 10);
         const newData = data.questions?.map((el, i) => {
-          console.log('resultData: ', resultData[i]?.result);
           const isHaveResult = resultData ? resultData[i]?.result : false;
           return {
             key: i,
@@ -173,7 +174,8 @@ function ExamListPage() {
     <>
       {contextHolder}
       {studentStatus ? (
-        <div className={clipPermission ? '' : styles.blur}>
+        <div>
+          {/* <div className={clipPermission ? '' : styles.blur}> */}
           <CustomTable
             columns={columns}
             onChange={(e) => {
@@ -196,7 +198,7 @@ function ExamListPage() {
               onChange={(e) => setInputToken(e.target.value)}
             />
           </Modal>
-          <Modal
+          {/* <Modal
             title="Izinkan Membaca Clipboard Screenshoot"
             open={permissionModal}
             onOk={async () => {
@@ -207,7 +209,7 @@ function ExamListPage() {
               }
             }}
             onCancel={() => setPermissionModal(false)}
-          />
+          /> */}
         </div>
       ) : null}
     </>

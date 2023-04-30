@@ -11,4 +11,5 @@ module.exports = {
   student: {
     StudentController: require('./student/StudentController'),
   },
+  DefaultController: require('./Controller'),
 };

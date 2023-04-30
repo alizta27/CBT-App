@@ -78,5 +78,10 @@ router.get(
   apiPath.api.admin.allQuestion,
   controllers.teacher.QuestionController.getAllListQuestion
 );
+// * ========== Result ===========
+router.delete(
+  apiPath.api.admin.deleteResult,
+  controllers.DefaultController.deleteResult
+);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const {
   Token,
   Question,
   Class,
+  Result,
 } = require('../models');
 const {
   comparePassword,
@@ -177,6 +178,18 @@ class Controller {
         where: { secret_token },
       });
       res.status(200).json({ token });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteResult(req, res, next) {
+    try {
+      const id = req.params.id;
+      await Result.destroy({
+        where: { id },
+      });
+      res.status(200).json({ message: 'Deleted' });
     } catch (error) {
       next(error);
     }

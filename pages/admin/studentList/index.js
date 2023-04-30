@@ -79,30 +79,37 @@ export default function StudentList() {
     {
       title: 'Nama Lengkap',
       dataIndex: 'fullName',
+      key: 'fullName',
     },
     {
       title: 'Kelas',
       dataIndex: 'className',
+      key: 'className',
     },
     {
       title: 'Username',
       dataIndex: 'userName',
+      key: 'userName',
     },
     {
       title: 'NISN',
       dataIndex: 'nisn',
+      key: 'nisn',
     },
     {
       title: 'NIS',
       dataIndex: 'nis',
+      key: 'nis',
     },
     {
       title: 'Status',
       dataIndex: 'status',
+      key: 'status',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 

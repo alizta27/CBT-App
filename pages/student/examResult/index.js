@@ -67,10 +67,12 @@ export default function ExamList() {
     {
       title: 'Soal',
       dataIndex: 'question',
+      key: 'question',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 

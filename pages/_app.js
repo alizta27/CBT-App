@@ -16,6 +16,7 @@ function App({ Component, ...rest }) {
   const router = useRouter();
   const [isInLogin, setIsInLogin] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const [isExam, setIsExam] = useState(false);
 
   const isBrowser = () => typeof window !== 'undefined';
 
@@ -38,6 +39,8 @@ function App({ Component, ...rest }) {
     const path = window.location.pathname;
     if (path === '/') {
       setIsInLogin(true);
+    } else if (path.includes('examPage')) {
+      setIsExam(true);
     } else {
       setIsInLogin(false);
     }
@@ -45,7 +48,7 @@ function App({ Component, ...rest }) {
 
   return (
     <Provider store={store}>
-      {isInLogin ? (
+      {isInLogin || isExam ? (
         <Component {...pageProps} />
       ) : isReady ? (
         <SideBarLayout>

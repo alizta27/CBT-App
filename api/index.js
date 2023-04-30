@@ -97,6 +97,9 @@ export default {
 
     // * ========= question ============
     getAllQuestion: (params) => http.get(apiPath.admin.allQuestion, { params }),
+
+    // * ========= result ============
+    deleteResult: (id) => http.delete(apiPath.admin.deleteResult + '/' + id),
   },
   teacher: {
     addQuestion: (payload) => http.post(apiPath.teacher.addQuestion, payload),

@@ -29,6 +29,7 @@ const apiPath = {
     deleteTeacher: '/admin/delete-teacher',
 
     allQuestion: '/admin/all-question',
+    deleteResult: '/admin/delete-result',
   },
 
   teacher: {
@@ -77,6 +78,7 @@ const apiPath = {
       deleteTeacher: '/delete-teacher/:id',
 
       allQuestion: '/all-question',
+      deleteResult: '/delete-result/:id',
     },
 
     teacher: {

@@ -77,22 +77,27 @@ export default function ClassList() {
     {
       title: 'Tingkat',
       dataIndex: 'class',
+      key: 'class',
     },
     {
       title: 'Nama Kelas',
       dataIndex: 'className',
+      key: 'className',
     },
     {
       title: 'Jumlah Siswa',
       dataIndex: 'totalStudents',
+      key: 'totalStudents',
     },
     {
       title: 'ID',
       dataIndex: 'id',
+      key: 'id',
     },
     {
       title: 'Aksi',
       dataIndex: 'action',
+      key: 'action',
     },
   ];
 
