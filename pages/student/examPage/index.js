@@ -27,6 +27,7 @@ import { Timer } from '@/components/Timer';
 import LS_KEYS from '@/constant/localStorage';
 
 import style from './styles.module.scss';
+import { DefaultLayout } from '@/components';
 
 const { useBreakpoint } = Grid;
 
@@ -44,7 +45,7 @@ function NewExamPage({ isOld }) {
   const [resultId, setResultId] = useState('');
   const [open, setOpen] = useState(true);
   // const [width, setWidth] = useState(600);
-  // const [height, setHeight] = useState(600);
+  const [height, setHeight] = useState(600);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [value, setValue] = useState({});
@@ -92,7 +93,7 @@ function NewExamPage({ isOld }) {
   useEffect(() => {
     if (typeof window !== undefined) {
       const { innerHeight: height, innerWidth: width } = window;
-      // setHeight(height);
+      setHeight(height);
       // setWidth(width);
     }
   });
@@ -125,15 +126,18 @@ function NewExamPage({ isOld }) {
       });
     }
   };
-  const refreshQuestion = async () => {
-    const { data: dataApi } = await dispatch(getOneQuestion(question_id));
-    if (dataApi) {
-      setQuestionLink(dataApi.question?.question_link);
-    } else {
-      api.error({
-        description: 'Gagal meload soal',
-        placement: 'topRight',
-      });
+  const refreshQuestion = async (question_id) => {
+    if (window) {
+      // const { data: dataApi } = await dispatch(getOneQuestion(question_id));
+      // if (dataApi) {
+      //   setQuestionLink(dataApi.question?.question_link);
+      // } else {
+      //   api.error({
+      //     description: 'Gagal meload soal',
+      //     placement: 'topRight',
+      //   });
+      // }
+      window.location?.reload(false);
     }
   };
 
@@ -407,10 +411,10 @@ function NewExamPage({ isOld }) {
   }, [forceFinish]);
 
   return (
-    <>
+    <DefaultLayout>
       {contextHolder}
       {questionLink ? (
-        <>
+        <div className={style.containerWrap} style={{ height }}>
           <div
             style={{
               display: 'flex',
@@ -444,7 +448,7 @@ function NewExamPage({ isOld }) {
               <iframe
                 onLoad={() => setLoaded(true)}
                 sandbox="allow-scripts allow-same-origin"
-                // height={md ? height - 180 : height - 350}
+                height={height}
                 // width={width - (md ? 300 : 400)}
                 src={questionLink}
                 style={{ width: '100%', height: '100%' }}
@@ -472,7 +476,7 @@ function NewExamPage({ isOld }) {
           >
             <p>Berdoalah sebelum mengerjakan soal</p>
           </Modal>
-        </>
+        </div>
       ) : (
         <div
           style={{
@@ -496,7 +500,7 @@ function NewExamPage({ isOld }) {
           style={{
             position: 'absolute',
             bottom: 20,
-            width: '80%',
+            width: '100%',
             display: 'flex',
             justifyContent: 'center',
           }}
@@ -565,7 +569,7 @@ function NewExamPage({ isOld }) {
           <ExamContent />
         </Drawer>
       ) : null}
-    </>
+    </DefaultLayout>
   );
 }
 

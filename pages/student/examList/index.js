@@ -22,7 +22,7 @@ function ExamListPage() {
   const [api, contextHolder] = notification.useNotification();
 
   const [examData, setExamData] = useState([]);
-  const [allResult, setAllResult] = useState([]);
+  // const [allResult, setAllResult] = useState([]);
   const [totalData, setTotalData] = useState(10);
   const [pageSize, setPageSize] = useState(10);
   const [studentStatus, setStudentStatus] = useState(false);

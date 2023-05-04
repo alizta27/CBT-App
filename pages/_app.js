@@ -19,32 +19,41 @@ function App({ Component, ...rest }) {
   const [isExam, setIsExam] = useState(false);
 
   const isBrowser = () => typeof window !== 'undefined';
+  // const path = () => {
+  //   if (isBrowser) return window?.location?.pathname;
+  // };
 
   useEffect(() => {
-    const path = window.location.pathname;
-    const token = getUserAuthToken();
-    if (!token && path !== '/') {
-      router.push('/');
+    if (isBrowser) {
+      const path = window?.location?.pathname;
+      if (path.length) {
+        const token = getUserAuthToken();
+        if (!token && path !== '/') {
+          router.push('/');
+        }
+      }
     }
-  }, []);
+  }, [isBrowser]);
 
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== 'undefined') {
       setIsReady(() => true);
       http.refreshToken();
     }
   }, [isBrowser]);
 
   useEffect(() => {
-    const path = window.location.pathname;
-    if (path === '/') {
-      setIsInLogin(true);
-    } else if (path.includes('examPage')) {
-      setIsExam(true);
-    } else {
-      setIsInLogin(false);
+    if (isBrowser) {
+      const path = window?.location?.pathname;
+      if (path === '/') {
+        setIsInLogin(true);
+      } else if (path.includes('examPage')) {
+        setIsExam(true);
+      } else {
+        setIsInLogin(false);
+      }
     }
-  });
+  }, [isBrowser]);
 
   return (
     <Provider store={store}>
