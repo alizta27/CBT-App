@@ -28,21 +28,31 @@ import LS_KEYS from '@/constant/localStorage';
 
 import style from './styles.module.scss';
 import { DefaultLayout } from '@/components';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const { useBreakpoint } = Grid;
 
 function NewExamPage({ isOld }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const question_id = router.query;
+  const questionId = router.query;
   const [api, contextHolder] = notification.useNotification();
   const { md } = useBreakpoint();
   // const clip = navigator.clipboard.read();
-
-  const [questionLink, setQuestionLink] = useState(null);
+  const [question_id, setQuestionId] = useLocalStorage(
+    LS_KEYS.STUDENT_EXAM_QUESTION_ID,
+    ''
+  );
+  const [questionLink, setQuestionLink] = useLocalStorage(
+    LS_KEYS.STUDENT_EXAM_QUESTION,
+    null
+  );
   const [qustionTotal, setQustionTotal] = useState([null]);
   const [examDuration, setExamDuration] = useState(null);
-  const [resultId, setResultId] = useState('');
+  const [resultId, setResultId] = useLocalStorage(
+    LS_KEYS.STUDENT_EXAM_RESULT_ID,
+    ''
+  );
   const [open, setOpen] = useState(true);
   // const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(600);
@@ -55,7 +65,10 @@ function NewExamPage({ isOld }) {
   const [studentBlurModal, setStudentBlurModal] = useState(false);
   const [forceFinish, setForceFinish] = useState(false);
   // const [clipStatus, setClipStatus] = useState('');
-  const [studentBlur, setStudentBlur] = useState(0);
+  const [studentBlur, setStudentBlur] = useLocalStorage(
+    LS_KEYS.STUDENT_EXAM_BLUR_COUNT,
+    0
+  );
   // const [clipAlertCount, setClipAlertCount] = useState(0);
   // const [clipAlertModal, setClipAlertModal] = useState(false);
 
@@ -81,6 +94,18 @@ function NewExamPage({ isOld }) {
       showModalAlert();
     }
   };
+
+  useEffect(() => {
+    if (questionId?.question_id) {
+      setQuestionId(questionId);
+      // if (typeof window !== undefined) {
+      //   localStorage.setItem(
+      //     LS_KEYS.STUDENT_EXAM_QUESTION_ID,
+      //     JSON.stringify(questionId)
+      //   );
+      // }
+    }
+  }, [questionId]);
 
   useEffect(() => {
     window.history.pushState(null, null, window.location.pathname);
@@ -110,10 +135,10 @@ function NewExamPage({ isOld }) {
       setExamDuration(dataApi.question?.duration);
 
       if (typeof window !== undefined) {
-        localStorage.setItem(
-          LS_KEYS.STUDENT_EXAM_QUESTION,
-          dataApi.question?.question_link
-        );
+        // localStorage.setItem(
+        //   LS_KEYS.STUDENT_EXAM_QUESTION,
+        //   dataApi.question?.question_link
+        // );
         localStorage.setItem(
           LS_KEYS.STUDENT_EXAM_TOTAL_QUESTION,
           JSON.stringify(arr)
@@ -126,17 +151,8 @@ function NewExamPage({ isOld }) {
       });
     }
   };
-  const refreshQuestion = async (question_id) => {
+  const refreshQuestion = async () => {
     if (window) {
-      // const { data: dataApi } = await dispatch(getOneQuestion(question_id));
-      // if (dataApi) {
-      //   setQuestionLink(dataApi.question?.question_link);
-      // } else {
-      //   api.error({
-      //     description: 'Gagal meload soal',
-      //     placement: 'topRight',
-      //   });
-      // }
       window.location?.reload(false);
     }
   };
@@ -147,6 +163,7 @@ function NewExamPage({ isOld }) {
 
   const hideModal = async () => {
     // resetClipBoard();
+    // window.ReactNativeWebView.postMessage({ exam: true });
     const { data: dataApi } = await dispatch(
       initResult({
         question_id: question_id.question_id,
@@ -155,9 +172,9 @@ function NewExamPage({ isOld }) {
     );
     if (dataApi) {
       setResultId(dataApi.id);
-      if (typeof window !== undefined) {
-        localStorage.setItem(LS_KEYS.STUDENT_EXAM_RESULT_ID, dataApi.id);
-      }
+      // if (typeof window !== undefined) {
+      //   localStorage.setItem(LS_KEYS.STUDENT_EXAM_RESULT_ID, dataApi.id);
+      // }
       setStart(true);
     } else {
       api.error({
@@ -168,27 +185,29 @@ function NewExamPage({ isOld }) {
       setOpen(false);
     }
   };
-
   const setOldData = () => {
     if (typeof window !== undefined) {
       const oldDuration = localStorage.getItem(LS_KEYS.STUDENT_EXAM_DURATION);
       const oldAnswer = localStorage.getItem(LS_KEYS.STUDENT_EXAM_ANSWER);
-      const oldQuestion = localStorage.getItem(LS_KEYS.STUDENT_EXAM_QUESTION);
+      // const oldQuestion = localStorage.getItem(LS_KEYS.STUDENT_EXAM_QUESTION);
       const oldTotalQuestion = localStorage.getItem(
         LS_KEYS.STUDENT_EXAM_TOTAL_QUESTION
       );
-      const oldResultId = localStorage.getItem(LS_KEYS.STUDENT_EXAM_RESULT_ID);
-      const oldBlurCount = localStorage.getItem(
-        LS_KEYS.STUDENT_EXAM_BLUR_COUNT
-      );
+      // const oldResultId = localStorage.getItem(LS_KEYS.STUDENT_EXAM_RESULT_ID);
+      // const oldBlurCount = localStorage.getItem(
+      //   LS_KEYS.STUDENT_EXAM_BLUR_COUNT
+      // );
+      // const oldQuestionId = localStorage.getItem(
+      //   LS_KEYS.STUDENT_EXAM_QUESTION_ID
+      // );
       // const oldSsCount = localStorage.getItem(LS_KEYS.STUDENT_EXAM_SS_COUNT);
-
       setValue(JSON.parse(oldAnswer) ?? {});
-      setExamDuration(+JSON.parse(oldDuration));
-      setQuestionLink(oldQuestion ?? '');
+      setExamDuration(+oldDuration);
+      // setQuestionLink(oldQuestion ?? '');
       setQustionTotal(JSON.parse(oldTotalQuestion));
-      setResultId(oldResultId);
-      setStudentBlur(+oldBlurCount);
+      // setResultId(oldResultId);
+      // setStudentBlur(+oldBlurCount);
+      // setQuestionId(JSON.parse(oldQuestionId));
       // setClipAlertCount(+JSON.parse(oldSsCount));
     }
   };
@@ -197,14 +216,16 @@ function NewExamPage({ isOld }) {
     if (isOld) {
       setStart(true);
       setOldData();
-    } else {
-      if (question_id) {
-        fetchQuestion(question_id);
-      }
+    }
+  }, [isOld]);
+
+  useEffect(() => {
+    if (question_id && !isOld) {
+      fetchQuestion(question_id);
     }
   }, [isOld, question_id]);
 
-  const clearStorage = () => {
+  const clearStorage = async () => {
     if (typeof window !== undefined) {
       localStorage.removeItem(LS_KEYS.STUDENT_EXAM);
       localStorage.removeItem(LS_KEYS.STUDENT_EXAM_ANSWER);
@@ -213,13 +234,13 @@ function NewExamPage({ isOld }) {
       localStorage.removeItem(LS_KEYS.STUDENT_EXAM_TOTAL_QUESTION);
       localStorage.removeItem(LS_KEYS.STUDENT_EXAM_QUESTION);
       localStorage.removeItem(LS_KEYS.STUDENT_EXAM_BLUR_COUNT);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_QUESTION_ID);
       // localStorage.removeItem(LS_KEYS.STUDENT_EXAM_SS_COUNT);
     }
   };
 
   const onExamFinish = async (value) => {
     let answer = '';
-
     if (!forceFinish) {
       if (Object.values(value).length !== qustionTotal?.length) {
         api.warning({
@@ -232,6 +253,10 @@ function NewExamPage({ isOld }) {
         api.warning({
           message: 'Anda belum mencukupi waktu minimal untuk mengumpulkan soal',
         });
+        return;
+      }
+    } else {
+      if (Object.values(value).length !== qustionTotal?.length) {
         return;
       }
     }
@@ -248,9 +273,11 @@ function NewExamPage({ isOld }) {
         answer,
         end_time: moment().unix(),
         question_id: question_id.question_id,
+        leave_count: studentBlur,
       })
     );
-    clearStorage();
+
+    await clearStorage();
     router.push('/student/examList');
   };
 
@@ -262,7 +289,7 @@ function NewExamPage({ isOld }) {
       if (typeof window !== undefined) {
         localStorage.setItem(
           LS_KEYS.STUDENT_EXAM_ANSWER,
-          JSON.stringify(value)
+          JSON.stringify(newValue)
         );
       }
     };
@@ -315,12 +342,14 @@ function NewExamPage({ isOld }) {
     }
   }, []);
 
+  const blurCounter = async (blur) => {
+    let count = +blur + 1;
+    await setStudentBlur(() => count);
+  };
+
   const onFocus = () => {
-    if (studentBlur >= 0) {
-      setStudentBlur((prevState) => {
-        let count = prevState;
-        return (count += 1);
-      });
+    if (+studentBlur >= 0) {
+      blurCounter(studentBlur);
     }
   };
 
@@ -371,38 +400,48 @@ function NewExamPage({ isOld }) {
   // }, [clipAlertCount, start]);
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      localStorage.setItem(LS_KEYS.STUDENT_EXAM_BLUR_COUNT, studentBlur);
-    }
-    if (studentBlur > 1) {
+    if (studentBlur > 2) {
       setForceFinish(true);
     }
+    if (forceFinish) {
+      onExamFinish(value);
+    }
   }, [studentBlur]);
+
+  // const triggerFromAndroid = (data) => {
+  //   console.log('daTT: ', data);
+  //   alert(JSON.stringify(data));
+  // };
+
   // colect result when user go out of exam
   useEffect(() => {
-    window.addEventListener('focus', onFocus);
+    // window.addEventListener('focus', onFocus);
     window.addEventListener('blur', onBlur);
+    document.addEventListener('message', onBlur);
+    // document.addEventListener('message', (e) => triggerFromAndroid(e));
     // window.addEventListener('visibilitychange', onVisibilitychange);
 
     return () => {
-      window.removeEventListener('focus', onFocus);
+      // window.removeEventListener('focus', onFocus);
+      // document.removeEventListener('message', (e) => triggerFromAndroid(e));
+      document.removeEventListener('message', onBlur);
       window.removeEventListener('blur', onBlur);
       // window.removeEventListener('focus', onVisibilitychange);
     };
   }, []);
 
-  // const listenSs = (e) => {
-  //   if (e.key == 'PrintScreen') {
-  //     navigator.clipboard.writeText('');
-  //     alert('Screenshots disabled!');
-  //   }
-  // };
-  // useEffect(() => {
-  //   window.addEventListener('keyup', (e) => listenSs(e));
-  //   return () => {
-  //     window.removeEventListener('keyup', (e) => listenSs(e));
-  //   };
-  // }, []);
+  const listenSs = (e) => {
+    if (e.key == 'PrintScreen') {
+      navigator.clipboard.writeText('');
+      // alert('Screenshots disabled!');
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('keyup', (e) => listenSs(e));
+    return () => {
+      window.removeEventListener('keyup', (e) => listenSs(e));
+    };
+  }, []);
 
   useEffect(() => {
     if (forceFinish) {
@@ -424,7 +463,7 @@ function NewExamPage({ isOld }) {
               marginBottom: 15,
             }}
           >
-            {examDuration && start ? (
+            {start ? (
               <Timer
                 isOld={isOld}
                 deadline={moment().add(examDuration, 'm').toDate()}
@@ -445,14 +484,19 @@ function NewExamPage({ isOld }) {
             ].join(' ')}
           >
             <div className={style.frameContainer}>
-              <iframe
-                onLoad={() => setLoaded(true)}
-                sandbox="allow-scripts allow-same-origin"
-                height={height}
-                // width={width - (md ? 300 : 400)}
-                src={questionLink}
-                style={{ width: '100%', height: '100%' }}
-              />
+              <div className={style.iframeInner}>
+                <iframe
+                  className={style.iframe}
+                  onLoad={() => setLoaded(true)}
+                  sandbox="allow-scripts allow-same-origin"
+                  frameBorder="0"
+                  // style="overflow:hidden;height:100%;width:100%"
+                  height="100%"
+                  // width={width - (md ? 300 : 400)}
+                  src={questionLink}
+                  style={{ width: '100%', height: '100%', border: 'none' }}
+                />
+              </div>
             </div>
             {open && md ? (
               <div className={style.answerContainer}>
@@ -531,7 +575,16 @@ function NewExamPage({ isOld }) {
         title="Anda terdeteksi keluar dari halaman ujian!"
         open={studentBlurModal}
         onCancel={toggleCloseStudentBlurModal}
-        footer={<Button onClick={toggleCloseStudentBlurModal}>Tutup</Button>}
+        footer={
+          <Button
+            onClick={() => {
+              toggleCloseStudentBlurModal();
+              onFocus();
+            }}
+          >
+            Tutup
+          </Button>
+        }
       >
         <p>
           Ujian anda akan di batalkan jika anda tetap keluar dari halaman ujian.

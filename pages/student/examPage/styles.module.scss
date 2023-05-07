@@ -19,6 +19,7 @@
 .frameContainer {
   width: 100%;
   height: 100%;
+  overflow: scroll;
 }
 
 .answerContainer {
@@ -40,4 +41,16 @@
 
 .blur {
   filter: blur(1.5rem);
+}
+.iframe {
+  display: block;       /* iframes are inline by default */
+  border: none;         /* Reset default border */
+  // height: 100vh;        /* Viewport-relative units */
+  width: 100vw;
+  pointer-events: none;
+  overflow: auto;
+}
+
+.iframeInner {
+  height: 3000vh;
 }

@@ -12,6 +12,7 @@ import {
 
 import style from './styles.module.scss';
 import LS_KEYS from '@/constant/localStorage';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;

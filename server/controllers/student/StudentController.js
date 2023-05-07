@@ -86,7 +86,7 @@ class StudentController {
     const t = await sequelize.transaction();
     try {
       const id = req.params.id;
-      const { question_id, answer, end_time } = req.body;
+      const { question_id, answer, end_time, leave_count } = req.body;
       const question = await Question.findOne({
         where: {
           id: question_id,
@@ -110,6 +110,7 @@ class StudentController {
           end_time,
           result,
           answer,
+          leave_count,
         },
         {
           where: { id },

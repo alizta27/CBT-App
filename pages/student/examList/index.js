@@ -15,6 +15,7 @@ import {
 } from '@/store/actions/student';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import LS_KEYS from '@/constant/localStorage';
 
 function ExamListPage() {
   const dispatch = useDispatch();
@@ -59,6 +60,24 @@ function ExamListPage() {
   // useEffect(() => {
   //   checkPermission();
   // }, []);
+
+  const clearStorage = async () => {
+    if (typeof window !== undefined) {
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_ANSWER);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_DURATION);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_RESULT_ID);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_TOTAL_QUESTION);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_QUESTION);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_BLUR_COUNT);
+      localStorage.removeItem(LS_KEYS.STUDENT_EXAM_QUESTION_ID);
+      // localStorage.removeItem(LS_KEYS.STUDENT_EXAM_SS_COUNT);
+    }
+  };
+
+  useEffect(() => {
+    clearStorage();
+  }, []);
 
   const showModal = () => {
     setOpen((prevState) => !prevState);

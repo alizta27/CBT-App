@@ -10,6 +10,17 @@ import { SideBarLayout } from '@/components';
 import { getUserAuthToken } from '@/utils/authHelper';
 import http from '@/api/http';
 
+const AppRender = ({ isInLogin, isExam, Component, ...pageProps }) => {
+  if (isInLogin || isExam) {
+    return <Component {...pageProps} />;
+  }
+  return (
+    <SideBarLayout>
+      <Component {...pageProps} />
+    </SideBarLayout>
+  );
+};
+
 function App({ Component, ...rest }) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
@@ -18,13 +29,10 @@ function App({ Component, ...rest }) {
   const [isReady, setIsReady] = useState(false);
   const [isExam, setIsExam] = useState(false);
 
-  const isBrowser = () => typeof window !== 'undefined';
-  // const path = () => {
-  //   if (isBrowser) return window?.location?.pathname;
-  // };
+  const isBrowser = typeof window !== 'undefined';
 
   useEffect(() => {
-    if (isBrowser) {
+    if (isReady) {
       const path = window?.location?.pathname;
       if (path.length) {
         const token = getUserAuthToken();
@@ -33,36 +41,38 @@ function App({ Component, ...rest }) {
         }
       }
     }
-  }, [isBrowser]);
+  }, [isReady]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (isBrowser) {
       setIsReady(() => true);
       http.refreshToken();
     }
   }, [isBrowser]);
 
   useEffect(() => {
-    if (isBrowser) {
-      const path = window?.location?.pathname;
+    if (isReady) {
+      const path = router.asPath;
       if (path === '/') {
         setIsInLogin(true);
       } else if (path.includes('examPage')) {
         setIsExam(true);
       } else {
         setIsInLogin(false);
+        setIsExam(false);
       }
     }
-  }, [isBrowser]);
+  }, [isReady, router.asPath]);
 
   return (
     <Provider store={store}>
-      {isInLogin || isExam ? (
-        <Component {...pageProps} />
-      ) : isReady ? (
-        <SideBarLayout>
-          <Component {...pageProps} />
-        </SideBarLayout>
+      {isReady ? (
+        <AppRender
+          isExam={isExam}
+          isInLogin={isInLogin}
+          Component={Component}
+          {...pageProps}
+        />
       ) : null}
     </Provider>
   );

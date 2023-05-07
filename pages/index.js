@@ -25,16 +25,10 @@ import http from '@/api/http';
 import style from './Login.module.scss';
 
 export default function Login() {
-  const [form] = Form.useForm();
   const router = useRouter();
   const [notif, contextHolder] = notification.useNotification();
   const dispatch = useDispatch();
 
-  const onRoleTypeChange = ({ roleType }) => {
-    setRoleType(roleType);
-  };
-
-  const [roleType, setRoleType] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   const showNotif = (type, message, description) => {
@@ -160,38 +154,6 @@ export default function Login() {
                 </Space>
               </Form>
             </Card>
-            {/* <div className={style.box}>
-              <div className={style.leftContainer}>
-                <Form
-                  onFinish={onFinish}
-                  form={form}
-                  layout="vertical"
-                  initialValues={{
-                    requiredMarkValue: roleType,
-                  }}
-                  onValuesChange={onRoleTypeChange}
-                >
-                  <Form.Item label="Username" name="username">
-                    <Input placeholder="username" />
-                  </Form.Item>
-                  <Form.Item label="Password" name="password">
-                    <Input.Password placeholder="password" />
-                  </Form.Item>
-                  <Form.Item label="Pilih Role" name="role">
-                    <Radio.Group>
-                      <Radio.Button value="admin">Admin</Radio.Button>
-                      <Radio.Button value="teacher">Guru</Radio.Button>
-                      <Radio.Button value="student">Siswa</Radio.Button>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Login
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </div>
-            </div> */}
           </div>
         </DefaultLayout>
       )}

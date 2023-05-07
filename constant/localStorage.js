@@ -9,6 +9,7 @@ const LS_KEYS = {
   STUDENT_EXAM_RESULT_ID: 'cbt-student-exam-result-id',
   STUDENT_EXAM_BLUR_COUNT: 'cbt-student-exam-blur-count',
   STUDENT_EXAM_SS_COUNT: 'cbt-student-exam-ss-count',
+  STUDENT_EXAM_QUESTION_ID: 'cbt-student-exam-question-id',
 };
 
 export default LS_KEYS;

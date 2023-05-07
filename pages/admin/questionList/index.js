@@ -193,6 +193,11 @@ export default function QuestionList() {
       key: 'answerAnalysis',
     },
     {
+      title: 'Total Keluar Ujian',
+      dataIndex: 'leaveCount',
+      key: 'leaveCount',
+    },
+    {
       title: 'Aksi',
       dataIndex: 'action',
       key: 'action',
@@ -260,6 +265,7 @@ export default function QuestionList() {
             ))}
           </Space>
         ),
+        leaveCount: el.leave_count,
         action: (
           <Button
             danger

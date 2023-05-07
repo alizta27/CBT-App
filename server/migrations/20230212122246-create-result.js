@@ -39,6 +39,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      leave_count: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       answer: {
         type: DataTypes.STRING,
         allowNull: true,
