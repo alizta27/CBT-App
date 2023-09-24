@@ -1,0 +1,32 @@
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.space {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wrapText {
+  overflow-wrap: break-word;
+  max-width: 200px;
+  :global {
+    .ant-tag {
+      margin: 0px;
+    }
+  }
+}
+
+.ansWrap {
+  max-width: 200px;
+  
+  :global {
+    .ant-tag {
+      margin: 0px;
+    }
+  }
+}

@@ -2,7 +2,6 @@ import appPath from '@/constant/appPath';
 import * as XLSX from 'xlsx';
 
 export const handleBarTitle = (value, callback) => {
-  console.log('value: ', value);
   switch (value) {
     case appPath.admin.dashboard:
       if (callback) callback('Dashboard');

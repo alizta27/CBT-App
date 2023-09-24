@@ -66,18 +66,32 @@ class StudentController {
   }
 
   static async initResult(req, res, next) {
+    const t = await sequelize.transaction();
     try {
       const { question_id, start_time } = req.body;
       const student_id = req?.userAccessLogin?.id;
-      const result = await Result.create({
-        id: uuid(),
-        question_id,
-        student_id,
-        start_time,
-        result: null,
+      const checkResult = await Result.findOne({
+        where: {
+          [Op.and]: [{ student_id }, { question_id }],
+        },
       });
-      res.status(200).json(result);
+      let result;
+      if (!checkResult) {
+        result = await Result.create(
+          {
+            id: uuid(),
+            question_id,
+            student_id,
+            start_time,
+            result: null,
+          },
+          { transaction: t }
+        );
+      }
+      await t.commit();
+      res.status(200).json(checkResult ?? result);
     } catch (error) {
+      await t.rollback();
       next(error);
     }
   }
@@ -86,35 +100,45 @@ class StudentController {
     const t = await sequelize.transaction();
     try {
       const id = req.params.id;
-      const { question_id, answer, end_time } = req.body;
+      const { question_id, answer, end_time, leave_count } = req.body;
       const question = await Question.findOne({
         where: {
           id: question_id,
         },
         attributes: ['answer'],
       });
-      const questionAnswer = question.answer;
-
-      let correct = 0;
-      let result = 0;
-
-      for (let i = 0; i < questionAnswer.length; i++) {
-        if (questionAnswer[i] === answer[i]) {
-          correct++;
-        }
-      }
-      result = (correct / questionAnswer.length) * 100;
-
-      await Result.update(
-        {
-          end_time,
-          result,
-          answer,
+      const oldResult = await Result.findOne({
+        where: {
+          id,
         },
-        {
-          where: { id },
+      });
+
+      if (!oldResult.result) {
+        const questionAnswer = question.answer;
+
+        let correct = 0;
+        let result = 0;
+
+        for (let i = 0; i < questionAnswer.length; i++) {
+          if (questionAnswer[i].toLowerCase() === answer[i].toLowerCase()) {
+            correct++;
+          }
         }
-      );
+        result = (correct / questionAnswer.length) * 100;
+
+        await Result.update(
+          {
+            end_time,
+            result,
+            answer,
+            leave_count,
+          },
+          {
+            where: { id },
+            transaction: t,
+          }
+        );
+      }
 
       await t.commit();
       res.status(200).json('Hasil dikumpulkan');
